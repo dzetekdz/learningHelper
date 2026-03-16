@@ -1,16 +1,25 @@
->
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Matematika Srozumitelně - Sokolov</title>
-    <link rel="stylesheet" href="style-matika.css">
+    <link rel="stylesheet" href="style-fyzika.css">
+    
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+          }
+        };
+    </script>
 </head>
 <body>
-    <nav>
+
+    <nav class="navbar">
         <ul>
             <li><a href="#uvod">Úvod</a></li>
             <li><a href="#6trida">6. Třída</a></li>
@@ -21,101 +30,150 @@
         </ul>
     </nav>
 
-    <div id="uvod">
+    <section id="uvod">
         <h1>Matematika Srozumitelně</h1>
         <p>Tato stránka ti pomůže pochopit matiku bez zbytečného stresu. Stačí pochopit princip!</p>
-        <button onclick="window.location.href='#6trida'">Začít se učit</button>
-        <button onclick="window.location.href='index.html'">Zpět na úvodní stránku</button>
-    </div>
+        <button class="tlacitko-uvod" onclick="window.location.href='#6trida';">
+            Začít se učit
+        </button>
+        <button class="tlacitko-uvod" onclick="window.location.href='index.html';">
+            Zpět na úvodní stránku
+        </button>
+    </section>
 
-    <div id="6trida">
+    <section id="6trida">
         <h1>6. Třída: Desetinná čísla a Úhly</h1>
         
-        <h2>1. Dělitelnost (NOVÉ)</h2>
-        <p>Dělitelnost nám říká, kdy jde číslo rozdělit beze zbytku. <br>
-        <strong>Sudá čísla:</strong> končí na 0, 2, 4, 6, 8. <br>
-        <strong>Dělitelnost 3:</strong> ciferný součet musí být dělitelný 3 (např. 123 -> 1+2+3=6, což jde).</p>
+        <details open>
+            <summary><h2>1. Desetinná čísla</h2></summary>
+            <p>Pamatuj: Při sčítání a odčítání musí být desetiná čárka vždy přesně pod sebou!</p>
+            <div class="vzorec-container">12,5 + 3,24 = 15,74</div>
+        </details>
 
-        <h2>2. Desetinná čísla</h2>
-        <p>Pamatuj: Při sčítání a odčítání musí být desetiná čárka vždy přesně pod sebou!</p>
-        <p>12,5 + 3,24 = 15,74</p>
+        <details>
+            <summary><h2>2. Druhy úhlů</h2></summary>
+            <p>Úhly dělíme podle jejich velikosti ve stupních:</p>
+            <ul>
+                <li><strong>Ostrý úhel:</strong> Méně než 90°</li>
+                <li><strong>Pravý úhel:</strong> Přesně 90°</li>
+                <li><strong>Tupý úhel:</strong> Mezi 90° a 180°</li>
+                <li><strong>Přímý úhel:</strong> Přesně 180°</li>
+                <li><strong>Plný úhel:</strong> 360°</li>
+            </ul>
+            
 
-        <h2>3. Druhy úhlů</h2>
-        <p>Úhly dělíme podle jejich velikosti ve stupních:</p>
-        <ul>
-            <li><strong>Ostrý úhel:</strong> Méně než 90°</li>
-            <li><strong>Pravý úhel:</strong> Přesně 90°</li>
-            <li><strong>Tupý úhel:</strong> Mezi 90° a 180°</li>
-            <li><strong>Přímý úhel:</strong> Přesně 180°</li>
-            <li><strong>Plný úhel:</strong> 360°</li>
-        </ul>
-        [attachment_0](attachment)
-    </div>
+[Image of acute, right, obtuse, straight and full angles]
 
-    <div id="7trida">
+        </details>
+    </section>
+
+    <section id="7trida">
         <h1>7. Třída: Zlomky a Úměrnost</h1>
         
-        <h2>1. Celá čísla (NOVÉ)</h2>
-        <p>Počítání s kladnými a zápornými čísly. <br>
-        Dvě mínus dávají plus: $-(-5) = 5$. <br>
-        Mínus a plus dává mínus: $5 + (-3) = 2$.</p>
+        <details>
+            <summary><h2>1. Zlomky</h2></summary>
+            <p>Zlomek vyjadřuje část celku. Horní číslo je čitatel, dolní jmenovatel.</p>
+            <div class="vzorec-container">$$\frac{1}{2} + \frac{1}{3} = \frac{3+2}{6} = \frac{5}{6}$$</div>
+        </details>
 
-        <h2>2. Zlomky</h2>
-        <p>Zlomek vyjadřuje část celku. Horní číslo je čitatel, dolní jmenovatel.</p>
-        $$\frac{1}{2} + \frac{1}{3} = \frac{3+2}{6} = \frac{5}{6}$$
+        <details>
+            <summary><h2>2. Procenta a Trojčlenka</h2></summary>
+            <p>100 % je základ (celek). 1 % je jedna setina celku.</p>
+            <div class="vzorec-container">$$1\% = \frac{Základ}{100}$$</div>
+        </details>
+    </section>
 
-        <h2>3. Procenta a Trojčlenka</h2>
-        <p>100 % je základ (celek). 1 % je jedna setina celku.</p>
-        $$1\% = \frac{Základ}{100}$$
-    </div>
-
-    <div id="8trida">
+    <section id="8trida">
         <h1>8. Třída: Algebra a Geometrie</h1>
         
-        <h2>1. Mocniny a Odmocniny</h2>
-        <p><strong>Mocnina</strong> je opakované násobení ($3^2 = 3 \cdot 3 = 9$). <br>
-        <strong>Odmocnina</strong> je opačná operace ($\sqrt{9} = 3$).</p>
-        $$a^n \cdot a^m = a^{n+m}$$
+        <details open>
+            <summary><h2>1. Mocniny a Odmocniny</h2></summary>
+            <p>
+                <strong style="color: #00b7ff;">Mocnina</strong> je opakované násobení ($3^2 = 3 \cdot 3 = 9$). 
+                <strong style="color: #00b7ff;">Odmocnina</strong> je opačná operace ($\sqrt{9} = 3$).
+            </p>
+            <div class="vzorec-container">$$a^n \cdot a^m = a^{n+m}$$</div>
+        </details>
 
-        <h2>2. Mnohočleny a Algebraické vzorce</h2>
-        <p>Mnohočleny jsou výrazy s písmenky. Tyto vzorce se musíš naučit nazpaměť:</p>
-        $$(a+b)^2 = a^2 + 2ab + b^2$$
-        $$(a-b)^2 = a^2 - 2ab + b^2$$
-        $$a^2 - b^2 = (a-b)(a+b)$$
+        <details>
+            <summary><h2>2. Mnohočleny a Algebraické vzorce</h2></summary>
+            <p>Mnohočleny jsou výrazy s písmenky. Tyto vzorce se musíš naučit nazpaměť:</p>
+            <div class="vzorec-container">
+                $$(a+b)^2 = a^2 + 2ab + b^2$$
+                $$(a-b)^2 = a^2 - 2ab + b^2$$
+                $$a^2 - b^2 = (a-b)(a+b)$$
+            </div>
+        </details>
 
-        <h2>3. Pythagorova věta</h2>
-        <p>Používáme pro výpočet stran v pravoúhlém trojúhelníku.</p>
-        [attachment_1](attachment)
-        $$a^2 + b^2 = c^2$$
+        <details>
+            <summary><h2>3. Pythagorova věta</h2></summary>
+            <p>Používáme pro výpočet stran v pravoúhlém trojúhelníku.</p>
+            
 
-        <h2>4. Kruh a kružnice (NOVÉ)</h2>
-        <p>Obvod kruhu: $o = 2 \cdot \pi \cdot r$ <br>
-        Obsah kruhu: $S = \pi \cdot r^2$</p>
-    </div>
+[Image of Pythagorean theorem triangle diagram]
 
-    <div id="9trida">
+            <div class="vzorec-container">$$a^2 + b^2 = c^2$$</div>
+        </details>
+    </section>
+
+    <section id="9trida">
         <h1>9. Třída: Rovnice, Funkce a Tělesa</h1>
         
-        <h2>1. Lomené výrazy (NOVÉ)</h2>
-        <p>Zlomky s neznámou ve jmenovateli. Musíme určit <strong>podmínky</strong> (jmenovatel nesmí být 0).</p>
+        <details>
+            <summary><h2>1. Lineární rovnice a jejich soustavy</h2></summary>
+            <p><strong>Rovnice:</strong> Hledáme $x$. Co uděláš na levé straně, musíš udělat i na pravé.</p>
+            <p><strong>Soustavy rovnic:</strong> Máme dvě rovnice o dvou neznámých (x, y). Používáme metodu sčítací nebo dosazovací.</p>
+        </details>
 
-        <h2>2. Lineární rovnice a jejich soustavy</h2>
-        <p><strong>Rovnice:</strong> Hledáme $x$. Co uděláš na levé straně, musíš udělat i na pravé.</p>
-        <p><strong>Soustavy rovnic:</strong> Máme dvě rovnice o dvou neznámých (x, y). Používáme metodu sčítací nebo dosazovací.</p>
+        <details>
+            <summary><h2>2. Funkce</h2></summary>
+            <p>Lineární funkce má předpis: $y = ax + b$. Grafem je vždy přímka.</p>
+            
 
-        <h2>3. Funkce</h2>
-        <p>Lineární funkce má předpis: $y = ax + b$. Grafem je vždy přímka.</p>
-        [attachment_2](attachment)
+[Image of linear function graph]
 
-        <h2>4. Jehlan, Kužel a Koule</h2>
-        <p><strong>Jehlan:</strong> $V = \frac{1}{3} S_p \cdot v$</p>
-        <p><strong>Kužel:</strong> $V = \frac{1}{3} \pi r^2 v$</p>
-        <p><strong>Koule:</strong> $V = \frac{4}{3} \pi r^3$</p>
-    </div>
+        </details>
 
-    <div id="kontakt">
+        <details>
+            <summary><h2>3. Jehlan</h2></summary>
+            <p>Jehlan má jednu podstavu a stěny (plášť), které se sbíhají do vrcholu.</p>
+            
+
+[Image of a pyramid with base and height]
+
+            <div class="vzorec-container">
+                $$V = \frac{1}{3} S_p \cdot v$$
+                $$S = S_p + S_{pl}$$
+            </div>
+            <p><strong>$S_p$</strong> = obsah podstavy, <strong>$v$</strong> = výška jehlanu, <strong>$S_{pl}$</strong> = obsah pláště.</p>
+        </details>
+
+        <details>
+            <summary><h2>4. Kužel</h2></summary>
+            <p>Kužel je podobný jehlanu, ale má kruhovou podstavu.</p>
+            
+            <div class="vzorec-container">
+                $$V = \frac{1}{3} \pi r^2 v$$
+                $$S = \pi r^2 + \pi r s$$
+            </div>
+            <p><strong>$r$</strong> = poloměr, <strong>$v$</strong> = výška, <strong>$s$</strong> = strana kužele.</p>
+        </details>
+
+        <details>
+            <summary><h2>5. Koule</h2></summary>
+            <p>U koule nám k výpočtu stačí znát pouze její poloměr <strong>$r$</strong>.</p>
+            
+            <div class="vzorec-container">
+                $$V = \frac{4}{3} \pi r^3$$
+                $$S = 4 \pi r^2$$
+            </div>
+        </details>
+    </section>
+
+    <section id="kontakt">
         <h1>Kontakt</h1>
-        <p>Email: <a href="mailto:david.z.kontakt@gmail.com">david.z.kontakt@gmail.com</a></p>
-    </div>
+        <p>Email: <a href="mailto:david.z.kontakt@gmail.com" style="color: #40b3ff;">david.z.kontakt@gmail.com</a></p>
+    </section>
+
 </body>
 </html>
