@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemie Srozumitelně - Sokolov</title>
+    <link rel="stylesheet" href="style-fyzika.css">
+    
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+          }
+        };
+    </script>
+</head>
+<body>
+
+    <nav class="navbar">
+        <ul>
+            <li><a href="#uvod">Úvod</a></li>
+            <li><a href="#8trida">8. Třída</a></li>
+            <li><a href="#9trida">9. Třída</a></li>
+            <li><a href="#kontakt">Kontakt</a></li>
+        </ul>
+    </nav>
+
+    <section id="uvod">
+        <h1>Chemie Srozumitelně</h1>
+        <p>Od atomů až po organické sloučeniny. Chemie není nuda, když víš, jak věci reagují!</p>
+        <button class="tlacitko-uvod" onclick="window.location.href='#8trida';">
+            Začít objevovat
+        </button>
+        <button class="tlacitko-uvod" onclick="window.location.href='index.html';">
+            Zpět na úvod
+        </button>
+    </section>
+
+    <section id="8trida">
+        <h1>8. Třída: Základy a Anorganická chemie</h1>
+        
+        <details open>
+            <summary><h2>1. Atomy a Prvky</h2></summary>
+            <p>Vše kolem nás je z atomů. Atom má jádro (protony, neutrony) a obal (elektrony).</p>
+            <p><strong>Periodická soustava prvků:</strong> Tabulka, kde jsou prvky seřazeny podle protonového čísla ($Z$).</p>
+            <div class="vzorec-container">$_Z^A X$</div>
+            <p>Kde $A$ je hmotnostní číslo a $Z$ je protonové číslo.</p>
+        </details>
+
+        <details>
+            <summary><h2>2. Chemická vazba a Směsi</h2></summary>
+            <p>Atomy se spojují do molekul pomocí <strong>chemické vazby</strong>. Směsi dělíme na:</p>
+            <ul>
+                <li><strong>Rovnorodé (roztoky):</strong> Nevidíme složky (např. slaná voda).</li>
+                <li><strong>Různorodé:</strong> Vidíme složky (např. písek ve vodě).</li>
+            </ul>
+        </details>
+
+        <details>
+            <summary><h2>3. Názvosloví (Oxidy, Kyseliny, Hydroxidy)</h2></summary>
+            <p>Základ chemie v 8. třídě. Musíš znát oxidační čísla (I až VIII).</p>
+            <div class="vzorec-container">
+                $H_2SO_4$ (Kyselina sírová) <br>
+                $NaOH$ (Hydroxid sodný)
+            </div>
+            <p><strong>pH stupnice:</strong> Určuje kyselost (0–6 kyseliny, 7 neutrální, 8–14 zásady).</p>
+        </details>
+
+        <details>
+            <summary><h2>4. Výpočty v chemii (Látkové množství)</h2></summary>
+            <p>Jak spočítat, kolik "toho" v roztoku je.</p>
+            <div class="vzorec-container">
+                $$n = \frac{m}{M}$$
+            </div>
+            <p>$n$ = látkové množství [mol], $m$ = hmotnost [g], $M$ = molární hmotnost [g/mol].</p>
+        </details>
+    </section>
+
+    <section id="9trida">
+        <h1>9. Třída: Organika a Chemie kolem nás</h1>
+        
+        <details>
+            <summary><h2>1. Uhlovodíky (Základ organiky)</h2></summary>
+            <p>Sloučeniny uhlíku ($C$) a vodíku ($H$). Uhlík je v organice vždy <strong>čtyřvazný</strong>!</p>
+            <ul>
+                <li><strong>Alkany:</strong> Jen jednoduché vazby (Metan, Etan, Propan...).</li>
+                <li><strong>Alkeny:</strong> Obsahují dvojnou vazbu.</li>
+                <li><strong>Alkiny:</strong> Obsahují trojnou vazbu.</li>
+            </ul>
+            <div class="vzorec-container">$CH_4$ (Metan)</div>
+        </details>
+
+        <details>
+            <summary><h2>2. Deriváty uhlovodíků (Alkoholy, Estery)</h2></summary>
+            <p>Když k uhlovodíku přidáme jiný prvek, vznikne derivát.</p>
+            <ul>
+                <li><strong>Alkoholy:</strong> Obsahují skupinu $-OH$ (např. Ethanol).</li>
+                <li><strong>Karboxylové kyseliny:</strong> Skupina $-COOH$ (např. Kyselina octová).</li>
+            </ul>
+        </details>
+
+        <details>
+            <summary><h2>3. Přírodní látky (Biochemie)</h2></summary>
+            <p>Látky, ze kterých jsme postaveni:</p>
+            <ul>
+                <li><strong>Sacharidy:</strong> Cukry (zdroj energie).</li>
+                <li><strong>Lipidy:</strong> Tuky (zásobárna energie).</li>
+                <li><strong>Bílkoviny:</strong> Stavební látky těla.</li>
+            </ul>
+        </details>
+
+        <details>
+            <summary><h2>4. Redoxní reakce</h2></summary>
+            <p>Reakce, při kterých se mění oxidační čísla prvků. Jeden prvek se <strong>oxiduje</strong> (odevzdá elektrony) a druhý se <strong>redukuje</strong> (přijme je).</p>
+            <div class="vzorec-container">
+                $Fe^0 + Cu^{+II}SO_4 \rightarrow Fe^{+II}SO_4 + Cu^0$
+            </div>
+        </details>
+    </section>
+
+    <section id="kontakt">
+        <h1>Kontakt</h1>
+        <p>Email: <a href="mailto:david.z.kontakt@gmail.com" style="color: #40b3ff;">david.z.kontakt@gmail.com</a></p>
+    </section>
+
+</body>
+</html>
