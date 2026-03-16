@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fyzika Srozumitelně - Sokolov</title>
+    <link rel="stylesheet" href="style-fyzika.css">
+    
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+    <nav class="navbar">
+        <ul>
+            <li><a href="#uvod">Úvod</a></li>
+            <li><a href="#6trida">6. Třída</a></li>
+            <li><a href="#7trida">7. Třída</a></li>
+            <li><a href="#8trida">8. Třída</a></li>
+            <li><a href="#9trida">9. Třída</a></li>
+            <li><a href="#kontakt">Kontakt</a></li>
+        </ul>
+    </nav>
+
+    <section id="uvod">
+        <h1>Fyzika Srozumitelně</h1>
+        <p>Tato stránka ti pomůže pochopit fyziku bez zbytečného biflování. Stačí pochopit princip!</p>
+        <button class="tlacitko-uvod" onclick="window.location.href='#6trida';">
+            Začít se učit
+        </button>
+        <button class="tlacitko-uvod" onclick="window.location.href='index.html';">
+            Zpět na úvodní stránku
+        </button>
+    </section>
+
+    <section id="6trida">
+        <h1>6. Třída: Látky a měření</h1>
+        
+        <details open>
+            <summary><h2>1. Hustota (Jak je to "hutné")</h2></summary>
+            <p>Představ si krabici s peřím a stejnou krabici se železem. Železo má větší <strong>hustotu</strong> – jeho částice jsou v krabici více "nacpané" u sebe.</p>
+            <div class="vzorec-container">$$\rho = \frac{m}{V}$$</div>
+            <p><strong>&rho; (rhó)</strong> = hustota [kg/m³], <strong>m</strong> = hmotnost [kg], <strong>V</strong> = objem [m³].</p>
+        </details>
+
+        <details>
+            <summary><h2>2. Atomy a Difuze</h2></summary>
+            <p>Vše je z atomů. Ty se neustále hýbou. <strong>Difuze</strong> je, když se látky samy promíchají (třeba sirup ve vodě nebo vůně parfému ve vzduchu).</p>
+        </details>
+
+        <details>
+            <summary><h2>3. Magnety</h2></summary>
+            <p>Magnet má severní (N) a jižní (S) pól. Stejné póly se odtlačují, opačné se přitahují. Kolem je neviditelné <strong>magnetické pole</strong>.</p>
+        </details>
+    </section>
+
+    <section id="7trida">
+        <h1>7. Třída: Pohyb, síla a tlak</h1>
+        
+        <details>
+            <summary><h2>1. Rychlost (Jak rychle pádíš)</h2></summary>
+            <p>Rychlost nám říká, jakou vzdálenost urazíme za určitý čas.</p>
+            <div class="vzorec-container">$$v = \frac{s}{t}$$</div>
+            <p><strong>v</strong> = rychlost [m/s nebo km/h], <strong>s</strong> = dráha, <strong>t</strong> = čas.</p>
+        </details>
+
+        <details>
+            <summary><h2>2. Síla (Tah a tlak)</h2></summary>
+            <p>Síla (F) vyjadřuje, jak moc na sebe tělesa působí. Měříme ji v Newtonech (N).</p>
+            <div class="vzorec-container">$$F = m \cdot g$$</div>
+            <p><strong>m</strong> = hmotnost [kg], <strong>g</strong> = gravitační zrychlení (na Zemi cca 10 N/kg).</p>
+            
+        </details>
+
+        <details>
+            <summary><h2>3. Tření (Proč to drhne)</h2></summary>
+            <p>Tření je síla, která působí proti směru pohybu. Vzniká, když po sobě dvě tělesa kloužou. Bez tření bychom se nemohli ani rozeběhnout, ani zastavit auto.</p>
+            <ul>
+                <li><strong>Smykové tření:</strong> Když táhneš skříň po podlaze.</li>
+                <li><strong>Valivý odpor:</strong> Když použiješ kolečka (je mnohem menší než smykové tření).</li>
+            </ul>
+        </details>
+
+        <details>
+            <summary><h2>4. Tlak (Když tě tlačí bota)</h2></summary>
+            <p>Tlak (p) vyjadřuje sílu působící na plochu. Čím menší plocha (třeba ostrý nůž nebo podpatky), tím větší tlak vzniká.</p>
+            <div class="vzorec-container">$$p = \frac{F}{S}$$</div>
+            <p><strong>p</strong> = tlak [Pascal - Pa], <strong>F</strong> = síla [N], <strong>S</strong> = obsah plochy [m²].</p>
+            
+        </details>
+
+        <details>
+            <summary><h2>5. Páka a Kladka (Jednoduché stroje)</h2></summary>
+            <p>Pomáhají nám zvedat těžké věci menší silou.</p>
+            <ul>
+                <li><strong>Páka:</strong> Čím delší rameno, tím méně síly potřebuješ. Platí: $$F_1 \cdot r_1 = F_2 \cdot r_2$$</li>
+                <li><strong>Kladka:</strong> Pevná kladka mění směr síly, volná kladka ti ušetří polovinu síly.</li>
+            </ul>
+            
+            
+
+[Image of fixed and movable pulleys]
+
+        </details>
+
+        <details>
+            <summary><h2>6. Archimédův zákon (Nadnášení)</h2></summary>
+            <p>Voda tě nadnáší silou, která je stejně velká jako váha vytlačené vody.</p>
+            <div class="vzorec-container">$$F_{vz} = V \cdot \rho_{kap} \cdot g$$</div>
+            
+
+[Image of Archimedes' principle]
+
+        </details>
+
+        <details>
+            <summary><h2>7. Atmosférický tlak</h2></summary>
+            <p>Vzduch nad námi váží tisíce tun a tlačí na nás ze všech stran. Cítíme to třeba jako zalehnutí v uších v letadle.</p>
+        </details>
+    </section>
+
+    <section id="8trida">
+        <h1>8. Třída: Energie, teplo a světlo</h1>
+        
+        <details>
+            <summary><h2>1. Práce a Výkon</h2></summary>
+            <p><strong>Práce</strong> se koná, když silou něco posuneš. <strong>Výkon</strong> říká, jak rychle tu práci uděláš.</p>
+            <div class="vzorec-container">$$W = F \cdot s \quad | \quad P = \frac{W}{t}$$</div>
+            <p><strong>W</strong> = práce [J], <strong>P</strong> = výkon [W].</p>
+        </details>
+
+        <details>
+            <summary><h2>2. Teplo</h2></summary>
+            <p>Teplo je energie, která teče z teplejšího na studenější předmět.</p>
+            <div class="vzorec-container">$$Q = m \cdot c \cdot (t_2 - t_1)$$</div>
+        </details>
+
+        <details>
+            <summary><h2>3. Optika (Zrcadla a čočky)</h2></summary>
+            <p>Světlo se odráží (zrcadla) nebo láme (voda, sklo, čočky). Díky tomu fungují brýle, lupy nebo tvoje oči.</p>
+            
+
+[Image of refraction of light through a prism]
+
+        </details>
+    </section>
+
+    <section id="9trida">
+        <h1>9. Třída: Elektřina, jádro a vesmír</h1>
+        
+        <details>
+            <summary><h2>1. Ohmův zákon (Elektrický okruh)</h2></summary>
+            <p>Základní vztah mezi proudem, napětím a odporem.</p>
+            <div class="vzorec-container">$$I = \frac{U}{R}$$</div>
+            <p><strong>I</strong> = proud [A], <strong>U</strong> = napětí [V], <strong>R</strong> = odpor [Ω].</p>
+        </details>
+
+        <details>
+            <summary><h2>2. Sériové a paralelní zapojení</h2></summary>
+            <p>Existují dva základní způsoby, jak zapojit součástky (třeba žárovky) v obvodu:</p>
+            <ul>
+                <li><strong>Sériové (za sebou):</strong> Proud prochází postupně všemi součástkami. Pokud se jedna žárovka rozbije, celý obvod se přeruší a nesvítí nic. $$R_{celk} = R_1 + R_2$$</li>
+                <li><strong>Paralelní (vedle sebe):</strong> Proud se dělí do větví. Pokud se jedna žárovka rozbije, ostatní svítí dál. Takhle jsou zapojené zásuvky v domě. $$\frac{1}{R_{celk}} = \frac{1}{R_1} + \frac{1}{R_2}$$</li>
+            </ul>
+            
+
+[Image of series vs parallel circuit diagrams]
+
+        </details>
+
+        <details>
+            <summary><h2>3. Jaderná fyzika</h2></summary>
+            <p>Zkoumá nitro atomu. Rozpadem jader získáváme obrovské množství energie v jaderných elektrárnách.</p>
+        </details>
+
+        <details>
+            <summary><h2>4. Vesmír</h2></summary>
+            <p>Naše Země je součástí Sluneční soustavy. Vše ve vesmíru drží pohromadě <strong>gravitace</strong>.</p>
+        </details>
+    </section>
+
+    <section id="kontakt">
+        <h1>Kontakt</h1>
+        <p>Email: <a href="mailto:david.z.kontakt@gmail.com" style="color: #40b3ff;">david.z.kontakt@gmail.com</a></p>
+    </section>
+
+</body>
+</html>
