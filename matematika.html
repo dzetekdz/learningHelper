@@ -15,6 +15,78 @@
             inlineMath: [['$', '$'], ['\\(', '\\)']]
           }
         };
+
+        // --- LOGIKA TESTŮ ---
+        let aktualniSpravna = 0;
+        let aktualniTyp = '';
+
+        const databazeOtazek = {
+            'desetinna': [
+                { q: "Kolik je 0,5 + 0,2?", a: ["0,7", "0,07"], ok: 0 },
+                { q: "Musí být čárky pod sebou?", a: ["Ano", "Ne"], ok: 0 },
+                { q: "1,2 + 0,05 =", a: ["1,25", "1,7"], ok: 0 }
+            ],
+            'uhly': [
+                { q: "Pravý úhel má:", a: ["90°", "180°"], ok: 0 },
+                { q: "Přímý úhel má:", a: ["180°", "360°"], ok: 0 },
+                { q: "Je 120° tupý úhel?", a: ["Ano", "Ne"], ok: 0 }
+            ],
+            'zlomky': [
+                { q: "Kolik je 1/2 + 1/2?", a: ["1", "1/4"], ok: 0 },
+                { q: "Horní číslo je:", a: ["Čitatel", "Jmenovatel"], ok: 0 }
+            ],
+            'procenta': [
+                { q: "100 % je:", a: ["Základ", "Polovina"], ok: 0 },
+                { q: "50 % ze 200 je:", a: ["100", "50"], ok: 0 }
+            ],
+            'mocniny': [
+                { q: "3 na druhou (3²) je:", a: ["9", "6"], ok: 0 },
+                { q: "Odmocnina z 25 je:", a: ["5", "10"], ok: 0 }
+            ],
+            'pythagoras': [
+                { q: "Vzorec věty:", a: ["a²+b²=c²", "a+b=c"], ok: 0 },
+                { q: "Platí v pravoúhlém trojúhelníku?", a: ["Ano", "Ne"], ok: 0 }
+            ],
+            'rovnice': [
+                { q: "x + 5 = 10, x = ?", a: ["5", "15"], ok: 0 }
+            ],
+            'telesa': [
+                { q: "Koule má poloměr:", a: ["r", "v"], ok: 0 },
+                { q: "Kužel má podstavu:", a: ["Kruh", "Čtverec"], ok: 0 }
+            ]
+        };
+
+        function toggleTest() {
+            document.getElementById('test-panel').classList.toggle('active');
+        }
+
+        function startTest(typ) {
+            aktualniTyp = typ;
+            novaOtazka();
+            document.getElementById('test-panel').classList.add('active');
+        }
+
+        function novaOtazka() {
+            const okruh = databazeOtazek[aktualniTyp] || databazeOtazek['desetinna'];
+            const nahodna = okruh[Math.floor(Math.random() * okruh.length)];
+            document.getElementById('otazka-text').innerText = nahodna.q;
+            document.getElementById('btn-1').innerText = nahodna.a[0];
+            document.getElementById('btn-2').innerText = nahodna.a[1];
+            aktualniSpravna = nahodna.ok;
+            document.getElementById('btn-1').style.background = "#333";
+            document.getElementById('btn-2').style.background = "#333";
+        }
+
+        function checkAnswer(index) {
+            const btn = document.getElementById('btn-' + (index + 1));
+            if (index === aktualniSpravna) {
+                btn.style.background = "#28a745";
+                setTimeout(novaOtazka, 500);
+            } else {
+                btn.style.background = "#dc3545";
+                setTimeout(() => btn.style.background = "#333", 500);
+            }
+        }
     </script>
 </head>
 <body>
@@ -22,6 +94,7 @@
     <nav class="navbar">
         <ul>
             <li><a href="#uvod">Úvod</a></li>
+            <li><a href="#Zaklad">Základní informace</a></li>
             <li><a href="#6trida">6. Třída</a></li>
             <li><a href="#7trida">7. Třída</a></li>
             <li><a href="#8trida">8. Třída</a></li>
@@ -33,12 +106,13 @@
     <section id="uvod">
         <h1>Matematika Srozumitelně</h1>
         <p>Tato stránka ti pomůže pochopit matiku bez zbytečného stresu. Stačí pochopit princip!</p>
-        <button class="tlacitko-uvod" onclick="window.location.href='#6trida';">
-            Začít se učit
-        </button>
-        <button class="tlacitko-uvod" onclick="window.location.href='index.html';">
-            Zpět na úvodní stránku
-        </button>
+        <button class="tlacitko-uvod" onclick="window.location.href='#6trida';">Začít se učit</button>
+        <button class="tlacitko-uvod" onclick="window.location.href='index.html';">Zpět na úvodní stránku</button>
+    </section>
+
+    <section id="Zaklad">
+        <h1>Základní informace</h1>
+        <p> </p>
     </section>
 
     <section id="6trida">
@@ -48,6 +122,8 @@
             <summary><h2>1. Desetinná čísla</h2></summary>
             <p>Pamatuj: Při sčítání a odčítání musí být desetiná čárka vždy přesně pod sebou!</p>
             <div class="vzorec-container">12,5 + 3,24 = 15,74</div>
+            <img src="Des-cisla.png" alt="Sčítání desetinných čísel pod sebou" width="1000" height="100">
+            <button class="btn-start" onclick="startTest('desetinna')">Spustit test</button>
         </details>
 
         <details>
@@ -59,11 +135,14 @@
                 <li><strong>Tupý úhel:</strong> Mezi 90° a 180°</li>
                 <li><strong>Přímý úhel:</strong> Přesně 180°</li>
                 <li><strong>Plný úhel:</strong> 360°</li>
+                <li><strong>Souhlasný a střídavý úhel:</strong> platí jen když je vedena přímka/úsečka přes rovnoběžky</li>
             </ul>
+            <img src="uhly.png" alt="Druhy úhlů" width="1000" height="100">
             
 
 [Image of acute, right, obtuse, straight and full angles]
 
+            <button class="btn-start" onclick="startTest('uhly')">Spustit test</button>
         </details>
     </section>
 
@@ -74,12 +153,20 @@
             <summary><h2>1. Zlomky</h2></summary>
             <p>Zlomek vyjadřuje část celku. Horní číslo je čitatel, dolní jmenovatel.</p>
             <div class="vzorec-container">$$\frac{1}{2} + \frac{1}{3} = \frac{3+2}{6} = \frac{5}{6}$$</div>
+            <img src="zlomky.png" alt="Zlomky" width="1000" height="100">
+            <button class="btn-start" onclick="startTest('zlomky')">Spustit test</button>
         </details>
 
         <details>
             <summary><h2>2. Procenta a Trojčlenka</h2></summary>
-            <p>100 % je základ (celek). 1 % je jedna setina celku.</p>
+            <p><strong>Procenta:</strong> 100 % je základ (celek). 1 % je jedna setina celku.</p>
             <div class="vzorec-container">$$1\% = \frac{Základ}{100}$$</div>
+            <p><strong>Trojčlenka:</strong> Pomocí ní spočítáme neznámou hodnotu, když známe tři další.</p>
+            <p><strong>Dělení:</strong> Dělíme ji na přímou a nepřímou úměrnost.</p>
+            <p><strong>Přímá úměrnost:</strong> Když jedna hodnota roste, druhá také roste.</p>
+            <p><strong>Nepřímá úměrnost:</strong> Když jedna hodnota roste, druhá klesá.</p>
+            <img src="trojclenka.png" alt="Trojčlenka" width="1000" height="100">
+            <button class="btn-start" onclick="startTest('procenta')">Spustit test</button>
         </details>
     </section>
 
@@ -93,6 +180,8 @@
                 <strong style="color: #00b7ff;">Odmocnina</strong> je opačná operace ($\sqrt{9} = 3$).
             </p>
             <div class="vzorec-container">$$a^n \cdot a^m = a^{n+m}$$</div>
+            <img src="mocniny.jpg" alt="Mocniny a odmocniny" width="1000" height="100">
+            <button class="btn-start" onclick="startTest('mocniny')">Spustit test</button>
         </details>
 
         <details>
@@ -108,11 +197,13 @@
         <details>
             <summary><h2>3. Pythagorova věta</h2></summary>
             <p>Používáme pro výpočet stran v pravoúhlém trojúhelníku.</p>
+            <div class="vzorec-container">$$a^2 + b^2 = c^2$$</div>
+            <img src="pyth.png" alt="Pythagorova věta" width="1000" height="100">
             
 
 [Image of Pythagorean theorem triangle diagram]
 
-            <div class="vzorec-container">$$a^2 + b^2 = c^2$$</div>
+            <button class="btn-start" onclick="startTest('pythagoras')">Spustit test</button>
         </details>
     </section>
 
@@ -123,6 +214,7 @@
             <summary><h2>1. Lineární rovnice a jejich soustavy</h2></summary>
             <p><strong>Rovnice:</strong> Hledáme $x$. Co uděláš na levé straně, musíš udělat i na pravé.</p>
             <p><strong>Soustavy rovnic:</strong> Máme dvě rovnice o dvou neznámých (x, y). Používáme metodu sčítací nebo dosazovací.</p>
+            <button class="btn-start" onclick="startTest('rovnice')">Spustit test</button>
         </details>
 
         <details>
@@ -146,12 +238,12 @@
                 $$S = S_p + S_{pl}$$
             </div>
             <p><strong>$S_p$</strong> = obsah podstavy, <strong>$v$</strong> = výška jehlanu, <strong>$S_{pl}$</strong> = obsah pláště.</p>
+            <button class="btn-start" onclick="startTest('telesa')">Spustit test</button>
         </details>
 
         <details>
             <summary><h2>4. Kužel</h2></summary>
             <p>Kužel je podobný jehlanu, ale má kruhovou podstavu.</p>
-            
             <div class="vzorec-container">
                 $$V = \frac{1}{3} \pi r^2 v$$
                 $$S = \pi r^2 + \pi r s$$
@@ -162,7 +254,6 @@
         <details>
             <summary><h2>5. Koule</h2></summary>
             <p>U koule nám k výpočtu stačí znát pouze její poloměr <strong>$r$</strong>.</p>
-            
             <div class="vzorec-container">
                 $$V = \frac{4}{3} \pi r^3$$
                 $$S = 4 \pi r^2$$
@@ -174,6 +265,16 @@
         <h1>Kontakt</h1>
         <p>Email: <a href="mailto:david.z.kontakt@gmail.com" style="color: #40b3ff;">david.z.kontakt@gmail.com</a></p>
     </section>
+
+    <div id="test-panel" class="test-panel">
+        <h3 id="test-nazev">Procvičování</h3>
+        <p id="otazka-text">Načítám...</p>
+        <div class="moznosti">
+            <button id="btn-1" onclick="checkAnswer(0)"></button>
+            <button id="btn-2" onclick="checkAnswer(1)"></button>
+        </div>
+        <button class="zavrit-test" onclick="toggleTest()">ZAVŘÍT TEST</button>
+    </div>
 
 </body>
 </html>
