@@ -27,28 +27,29 @@
                 { q: "1,2 + 0,05 =", a: ["1,25", "1,7"], ok: 0 }
             ],
             'uhly': [
-                { q: "Pravý úhel má:", a: ["90°", "180°"], ok: 0 },
-                { q: "Přímý úhel má:", a: ["180°", "360°"], ok: 0 },
+                { q: "Jaký úhel má 90°?", a: ["Pravý", "Ostrý"], ok: 0 },
+                { q: "Úhel 180° je:", a: ["Přímý", "Plný"], ok: 0 },
                 { q: "Je 120° tupý úhel?", a: ["Ano", "Ne"], ok: 0 }
             ],
             'zlomky': [
-                { q: "Kolik je 1/2 + 1/2?", a: ["1", "1/4"], ok: 0 },
+                { q: "1/2 + 1/2 =", a: ["1", "1/4"], ok: 0 },
                 { q: "Horní číslo je:", a: ["Čitatel", "Jmenovatel"], ok: 0 }
             ],
             'procenta': [
-                { q: "100 % je:", a: ["Základ", "Polovina"], ok: 0 },
+                { q: "100 % je vždy:", a: ["Základ", "Polovina"], ok: 0 },
                 { q: "50 % ze 200 je:", a: ["100", "50"], ok: 0 }
             ],
             'mocniny': [
-                { q: "3 na druhou (3²) je:", a: ["9", "6"], ok: 0 },
-                { q: "Odmocnina z 25 je:", a: ["5", "10"], ok: 0 }
+                { q: "Kolik je 3²?", a: ["9", "6"], ok: 0 },
+                { q: "Odmocnina z 16 je:", a: ["4", "8"], ok: 0 }
             ],
             'pythagoras': [
-                { q: "Vzorec věty:", a: ["a²+b²=c²", "a+b=c"], ok: 0 },
+                { q: "Vzorec zní:", a: ["a²+b²=c²", "a+b=c"], ok: 0 },
                 { q: "Platí v pravoúhlém trojúhelníku?", a: ["Ano", "Ne"], ok: 0 }
             ],
             'rovnice': [
-                { q: "x + 5 = 10, x = ?", a: ["5", "15"], ok: 0 }
+                { q: "x + 10 = 15, x = ?", a: ["5", "25"], ok: 0 },
+                { q: "2x = 10, x = ?", a: ["5", "20"], ok: 0 }
             ],
             'telesa': [
                 { q: "Koule má poloměr:", a: ["r", "v"], ok: 0 },
@@ -112,7 +113,7 @@
 
     <section id="Zaklad">
         <h1>Základní informace</h1>
-        <p>Vítejte v interaktivním přehledu učiva.</p>
+        <p>Zde najdeš přehled učiva základní školy rozdělený podle ročníků.</p>
     </section>
 
     <section id="6trida">
@@ -122,7 +123,7 @@
             <summary><h2>1. Desetinná čísla</h2></summary>
             <p>Pamatuj: Při sčítání a odčítání musí být desetiná čárka vždy přesně pod sebou!</p>
             <div class="vzorec-container">12,5 + 3,24 = 15,74</div>
-            <img src="Des-cisla.png" alt="Sčítání desetinných čísel pod sebou" class="responzivni-img">
+            <img src="Des-cisla.png" alt="Sčítání desetinných čísel pod sebou">
             <button class="btn-start" onclick="startTest('desetinna')">Spustit test</button>
         </details>
 
@@ -135,12 +136,13 @@
                 <li><strong>Tupý úhel:</strong> Mezi 90° a 180°</li>
                 <li><strong>Přímý úhel:</strong> Přesně 180°</li>
                 <li><strong>Plný úhel:</strong> 360°</li>
+                <li><strong>Souhlasný a střídavý úhel:</strong> platí jen když je vedena přímka/úsečka přes rovnoběžky</li>
             </ul>
-            <img src="uhly.png" alt="Druhy úhlů" class="responzivni-img">
             
 
 [Image of acute, right, obtuse, straight and full angles]
 
+            <img src="uhly.png" alt="Druhy úhlů">
             <button class="btn-start" onclick="startTest('uhly')">Spustit test</button>
         </details>
     </section>
@@ -152,7 +154,7 @@
             <summary><h2>1. Zlomky</h2></summary>
             <p>Zlomek vyjadřuje část celku. Horní číslo je čitatel, dolní jmenovatel.</p>
             <div class="vzorec-container">$$\frac{1}{2} + \frac{1}{3} = \frac{3+2}{6} = \frac{5}{6}$$</div>
-            <img src="zlomky.png" alt="Zlomky" class="responzivni-img">
+            <img src="zlomky.png" alt="Zlomky">
             <button class="btn-start" onclick="startTest('zlomky')">Spustit test</button>
         </details>
 
@@ -164,7 +166,7 @@
             <p><strong>Dělení:</strong> Dělíme ji na přímou a nepřímou úměrnost.</p>
             <p><strong>Přímá úměrnost:</strong> Když jedna hodnota roste, druhá také roste.</p>
             <p><strong>Nepřímá úměrnost:</strong> Když jedna hodnota roste, druhá klesá.</p>
-            <img src="trojclenka.png" alt="Trojčlenka" class="responzivni-img">
+            <img src="trojclenka.png" alt="Trojčlenka">
             <button class="btn-start" onclick="startTest('procenta')">Spustit test</button>
         </details>
     </section>
@@ -179,7 +181,7 @@
                 <strong style="color: #00b7ff;">Odmocnina</strong> je opačná operace ($\sqrt{9} = 3$).
             </p>
             <div class="vzorec-container">$$a^n \cdot a^m = a^{n+m}$$</div>
-            <img src="mocniny.jpg" alt="Mocniny a odmocniny" class="responzivni-img">
+            <img src="mocniny.jpg" alt="Mocniny a odmocniny">
             <button class="btn-start" onclick="startTest('mocniny')">Spustit test</button>
         </details>
 
@@ -197,11 +199,11 @@
             <summary><h2>3. Pythagorova věta</h2></summary>
             <p>Používáme pro výpočet stran v pravoúhlém trojúhelníku.</p>
             <div class="vzorec-container">$$a^2 + b^2 = c^2$$</div>
-            <img src="pyth.png" alt="Pythagorova věta" class="responzivni-img">
             
 
 [Image of Pythagorean theorem triangle diagram]
 
+            <img src="pyth.png" alt="Pythagorova věta">
             <button class="btn-start" onclick="startTest('pythagoras')">Spustit test</button>
         </details>
     </section>
@@ -228,17 +230,46 @@
         <details>
             <summary><h2>3. Jehlan</h2></summary>
             <p>Jehlan má jednu podstavu a stěny (plášť), které se sbíhají do vrcholu.</p>
+            
+
+[Image of a pyramid with base and height]
+
             <div class="vzorec-container">
                 $$V = \frac{1}{3} S_p \cdot v$$
                 $$S = S_p + S_{pl}$$
             </div>
+            <p><strong>$S_p$</strong> = obsah podstavy, <strong>$v$</strong> = výška jehlanu, <strong>$S_{pl}$</strong> = obsah pláště.</p>
             <button class="btn-start" onclick="startTest('telesa')">Spustit test</button>
         </details>
+
+        <details>
+            <summary><h2>4. Kužel</h2></summary>
+            <p>Kužel je podobný jehlanu, ale má kruhovou podstavu.</p>
+            <div class="vzorec-container">
+                $$V = \frac{1}{3} \pi r^2 v$$
+                $$S = \pi r^2 + \pi r s$$
+            </div>
+            <p><strong>$r$</strong> = poloměr, <strong>$v$</strong> = výška, <strong>$s$</strong> = strana kužele.</p>
+        </details>
+
+        <details>
+            <summary><h2>5. Koule</h2></summary>
+            <p>U koule nám k výpočtu stačí znát pouze její poloměr <strong>$r$</strong>.</p>
+            <div class="vzorec-container">
+                $$V = \frac{4}{3} \pi r^3$$
+                $$S = 4 \pi r^2$$
+            </div>
+        </details>
+    </section>
+
+    <section id="kontakt">
+        <h1>Kontakt</h1>
+        <p>Email: <a href="mailto:david.z.kontakt@gmail.com" style="color: #40b3ff;">david.z.kontakt@gmail.com</a></p>
     </section>
 
     <div id="test-panel" class="test-panel">
         <h3 id="test-nazev">Procvičování</h3>
-        <p id="otazka-text">Načítám...</p>
+        <p id="otazka-text"></p>
         <div class="moznosti">
             <button id="btn-1" onclick="checkAnswer(0)"></button>
             <button id="btn-2" onclick="checkAnswer(1)"></button>
