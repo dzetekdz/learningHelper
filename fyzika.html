@@ -4,185 +4,361 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fyzika Srozumitelně - Sokolov</title>
+    
     <link rel="stylesheet" href="style-fyzika.css">
     
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <script>
+        let aktualniSpravna = 0;
+        let aktualniTyp = '';
+        let lzeKlikat = true; 
+        let scoreCelkem = 0;
+        let scoreVade = 0;
+        let indexyOtazek = []; 
+
+        const databazeOtazek = {
+            'hustota': [
+                { q: "V čem měříme hustotu?", a: ["kg/m³", "Newton"], ok: 0 },
+                { q: "Vzorec pro hustotu je:", a: ["m / V", "F * s"], ok: 0 },
+                { q: "Značka hustoty je:", a: ["ρ (rhó)", "p"], ok: 0 },
+                { q: "Voda má hustotu přibližně:", a: ["1000 kg/m³", "10 kg/m³"], ok: 0 },
+                { q: "Co plave na vodě?", a: ["Látka s menší hustotou", "Látka s větší hustotou"], ok: 0 },
+                { q: "Když zvětšíme objem při stejné hmotnosti, hustota:", a: ["Klesne", "Stoupne"], ok: 0 },
+                { q: "Hustota oleje je většinou:", a: ["Menší než vody", "Větší než vody"], ok: 0 },
+                { q: "Vypočítej ρ, když m=10kg a V=2m³:", a: ["5 kg/m³", "20 kg/m³"], ok: 0 },
+                { q: "Měří se hustota hustoměrem?", a: ["Ano", "Ne"], ok: 0 },
+                { q: "Led má hustotu:", a: ["Menší než kapalná voda", "Stejnou jako voda"], ok: 0 },
+                { q: "Měď má hustotu cca 8960 kg/m³. Je těžší než voda?", a: ["Ano", "Ne"], ok: 0 },
+                { q: "Když těleso stlačíme, jeho hustota se:", a: ["Zvětší", "Zmenší"], ok: 0 },
+                { q: "Který kov má větší hustotu?", a: ["Olovo", "Hliník"], ok: 0 },
+                { q: "Hustota vzduchu se s výškou:", a: ["Zmenšuje", "Zvětšuje"], ok: 0 },
+                { q: "Hustota zlata je cca 19 300 kg/m³. Plave ve vodě?", a: ["Ne", "Ano"], ok: 0 }
+            ],
+            'rychlost': [
+                { q: "Vzorec pro rychlost je:", a: ["v = s / t", "v = s * t"], ok: 0 },
+                { q: "Jednotka rychlosti v SI je:", a: ["m/s", "km/h"], ok: 0 },
+                { q: "Jak převedeme m/s na km/h?", a: ["Násobíme 3,6", "Dělíme 3,6"], ok: 0 },
+                { q: "Dráha se značí:", a: ["s", "d"], ok: 0 },
+                { q: "Urazím 10m za 2s. Moje rychlost je:", a: ["5 m/s", "20 m/s"], ok: 0 },
+                { q: "Pohyb, kde se rychlost nemění, je:", a: ["Rovnoměrný", "Nerovnoměrný"], ok: 0 },
+                { q: "Když t=2h a v=50km/h, dráha s=?", a: ["100 km", "25 km"], ok: 0 },
+                { q: "Zvuk letí rychlostí cca:", a: ["340 m/s", "300 000 km/s"], ok: 0 },
+                { q: "Světlo letí rychlostí cca:", a: ["300 000 km/s", "340 m/s"], ok: 0 },
+                { q: "Rychlost 10 m/s je kolik km/h?", a: ["36 km/h", "10 km/h"], ok: 0 },
+                { q: "Grafem dráhy (s) v čase (t) u rovnoměrného pohybu je:", a: ["Přímka", "Kružnice"], ok: 0 },
+                { q: "Průměrná rychlost se počítá jako:", a: ["Celková dráha / celkový čas", "Průměr všech rychlostí"], ok: 0 },
+                { q: "Co měří tachometr v autě?", a: ["Okamžitou rychlost", "Dráhu"], ok: 0 },
+                { q: "Jednotka času v SI je:", a: ["Sekunda", "Hodina"], ok: 0 },
+                { q: "Ujede auto 200 km za 2h rychlostí 100 km/h?", a: ["Ano", "Ne"], ok: 0 }
+            ],
+            'tlak': [
+                { q: "Jednotka tlaku je:", a: ["Pascal (Pa)", "Newton (N)"], ok: 0 },
+                { q: "Vzorec pro tlak je:", a: ["p = F / S", "p = F * S"], ok: 0 },
+                { q: "Čím menší plocha, tím tlak:", a: ["Větší", "Menší"], ok: 0 },
+                { q: "Pascalův zákon platí v:", a: ["Kapalinách a plynech", "Jen v kovech"], ok: 0 },
+                { q: "Hydrostatický tlak závisí na:", a: ["Hloubce", "Šířce nádoby"], ok: 0 },
+                { q: "Atmosférický tlak s výškou:", a: ["Klesá", "Stoupá"], ok: 0 },
+                { q: "Čím měříme atmosférický tlak?", a: ["Barometrem", "Hustoměrem"], ok: 0 },
+                { q: "1 hPa je kolik Pascalů?", a: ["100 Pa", "10 Pa"], ok: 0 },
+                { q: "Hydraulický lis využívá:", a: ["Pascalův zákon", "Ohmův zákon"], ok: 0 },
+                { q: "Proč se boříš v podpatcích?", a: ["Velký tlak na malou plochu", "Velká hmotnost"], ok: 0 },
+                { q: "Krevní tlak se měří přístrojem zvaným:", a: ["Tonometr", "Voltmetr"], ok: 0 },
+                { q: "Jednotka plochy S v SI je:", a: ["m²", "cm²"], ok: 0 },
+                { q: "Podtlak je tlak:", a: ["Nižší než atmosférický", "Nula"], ok: 0 },
+                { q: "Torricelliho pokus dokázal existenci:", a: ["Atmosférického tlaku", "Elektřiny"], ok: 0 },
+                { q: "Přenáší se tlak v kapalině všemi směry?", a: ["Ano", "Ne"], ok: 0 }
+            ],
+            'prace': [
+                { q: "V čem měříme práci?", a: ["Joule (J)", "Watt (W)"], ok: 0 },
+                { q: "Kdy se koná práce?", a: ["Když silou pohnu tělesem", "Když držím těžký kufr"], ok: 0 },
+                { q: "Vzorec pro práci je:", a: ["W = F * s", "W = F / s"], ok: 0 },
+                { q: "Jednotka výkonu je:", a: ["Watt (W)", "Joule (J)"], ok: 0 },
+                { q: "Výkon P se počítá:", a: ["W / t", "W * t"], ok: 0 },
+                { q: "Zvednu 10 N do 1 m. Práce je:", a: ["10 J", "1 J"], ok: 0 },
+                { q: "1 MJ (MegaJoule) je:", a: ["1 000 000 J", "1 000 J"], ok: 0 },
+                { q: "Účinnost stroje může být:", a: ["Vždy menší než 100 %", "Libovolně velká"], ok: 0 },
+                { q: "Energie se značí písmenem:", a: ["E", "P"], ok: 0 },
+                { q: "Polohová energie závisí na:", a: ["Hmotnosti a výšce", "Jen na rychlosti"], ok: 0 },
+                { q: "Pohybová energie závisí na:", a: ["Rychlosti", "Čase"], ok: 0 },
+                { q: "Watt byl vynálezce z:", a: ["Skotska", "Francie"], ok: 0 },
+                { q: "Práce 1 J za 1 s je výkon:", a: ["1 Watt", "10 Wattů"], ok: 0 },
+                { q: "Když těleso jen držím, výkon je:", a: ["0 W", "100 W"], ok: 0 },
+                { q: "Energie se může ztratit?", a: ["Ne, jen přeměnit", "Ano, třením zmizí"], ok: 0 }
+            ],
+            'teplo': [
+                { q: "Značka tepla je:", a: ["Q", "T"], ok: 0 },
+                { q: "Teplo měříme v:", a: ["Joulech (J)", "Stupních Celsia"], ok: 0 },
+                { q: "Teplota tání ledu je:", a: ["0 °C", "100 °C"], ok: 0 },
+                { q: "Vzorec Q = m * c * Δt. Co je 'c'?", a: ["Měrná tepelná kapacita", "Čas"], ok: 0 },
+                { q: "Teplo teče samovolně z:", a: ["Teplejšího na studenější", "Studeného na teplé"], ok: 0 },
+                { q: "Při vypařování se kapalina mění na:", a: ["Plyn", "Pevnou látku"], ok: 0 },
+                { q: "Sublimace je přeměna z:", a: ["Pevné látky na plyn", "Plynu na kapalinu"], ok: 0 },
+                { q: "Vedení tepla je nejrychlejší v:", a: ["Kovech", "Vzduchu"], ok: 0 },
+                { q: "Vakuum vede teplo:", a: ["Ne (jen zářením)", "Skvěle"], ok: 0 },
+                { q: "Jednotka teploty v SI je:", a: ["Kelvin (K)", "Celsiův stupeň"], ok: 0 },
+                { q: "Absolutní nula (0 K) je:", a: ["-273,15 °C", "0 °C"], ok: 0 },
+                { q: "Bimetal se teplem:", a: ["Prohýbá", "Zkracuje"], ok: 0 },
+                { q: "Voda má největší hustotu při:", a: ["4 °C", "0 °C"], ok: 0 },
+                { q: "Anomálie vody umožňuje:", a: ["Zamrzání hladiny (ryby přežijí)", "Vření vody"], ok: 0 },
+                { q: "Rosný bod souvisí s:", a: ["Vlhkostí vzduchu", "Třením"], ok: 0 }
+            ],
+            'ohm': [
+                { q: "Jednotka elektrického proudu:", a: ["Ampér (A)", "Volt (V)"], ok: 0 },
+                { q: "Jednotka napětí:", a: ["Volt (V)", "Ampér (A)"], ok: 0 },
+                { q: "Ohmův zákon: I =", a: ["U / R", "U * R"], ok: 0 },
+                { q: "Jednotka odporu R:", a: ["Ohm (Ω)", "Watt (W)"], ok: 0 },
+                { q: "Vodičem je:", a: ["Měď", "Plast"], ok: 0 },
+                { q: "Napětí v zásuvce (ČR):", a: ["230 V", "12 V"], ok: 0 },
+                { q: "U sériového zapojení žárovek:", a: ["Při prasknutí jedné nesvítí žádná", "Ostatní svítí"], ok: 0 },
+                { q: "Pojistka v obvodu:", a: ["Chrání před zkratem", "Zvyšuje výkon"], ok: 0 },
+                { q: "Elektrický výkon P =", a: ["U * I", "U / I"], ok: 0 },
+                { q: "Baterie vyrábí proud:", a: ["Stejnosměrný", "Střídavý"], ok: 0 },
+                { q: "Voltmetr se zapojuje:", a: ["Paralelně", "Sériově"], ok: 0 },
+                { q: "Ampérmetr se zapojuje:", a: ["Sériově", "Paralelně"], ok: 0 },
+                { q: "Zkrat nastane, když:", a: ["Se spojí póly bez spotřebiče", "Vypneme vypínač"], ok: 0 },
+                { q: "Odpor drátu závisí na:", a: ["Délce a materiálu", "Barvě"], ok: 0 },
+                { q: "Polovodič je například:", a: ["Křemík", "Železo"], ok: 0 }
+            ],
+            'obvody': [
+                { q: "U kterého zapojení jsou součástky v jedné řadě?", a: ["Sériové", "Paralelní"], ok: 0 },
+                { q: "Jak se značí paralelní zapojení?", a: ["Vedle sebe (ve větvích)", "Za sebou"], ok: 0 },
+                { q: "V kterém obvodu je proud (I) všude stejný?", a: ["Sériové", "Paralelní"], ok: 0 },
+                { q: "Kde je napětí (U) stejné ve všech větvích?", a: ["Paralelní", "Sériové"], ok: 0 },
+                { q: "Když praskne jedna žárovka a ostatní zhasnou, jde o:", a: ["Sériové zapojení", "Paralelní zapojení"], ok: 0 },
+                { q: "Jak jsou zapojeny zásuvky v bytě?", a: ["Paralelně", "Sériově"], ok: 0 },
+                { q: "Celkové napětí U = U1 + U2 platí pro:", a: ["Sériové zapojení", "Paralelní zapojení"], ok: 0 },
+                { q: "Celkový proud I = I1 + I2 platí pro:", a: ["Paralelní zapojení", "Sériové zapojení"], ok: 0 },
+                { q: "Které zapojení se používá pro vánoční řetězy starého typu?", a: ["Sériové", "Paralelní"], ok: 0 },
+                { q: "U kterého zapojení se při poruše jedné větve zbytek nepřeruší?", a: ["Paralelní", "Sériové"], ok: 0 },
+                { q: "Máme dvě stejné žárovky sériově. Jak svítí oproti jedné?", a: ["Méně (dělí se napětí)", "Více"], ok: 0 },
+                { q: "V paralelním obvodu se proud:", a: ["Rozděluje do větví", "Nijak nemění"], ok: 0 },
+                { q: "V sériovém obvodu se napětí:", a: ["Sčítá z jednotlivých spotřebičů", "Je všude stejné"], ok: 0 },
+                { q: "Značka pro uzel (místo rozdělení proudu) je v obvodu:", a: ["Paralelním", "Sériovém"], ok: 0 },
+                { q: "Lze v paralelním obvodu vypnout jen jeden spotřebič?", a: ["Ano", "Ne"], ok: 0 }
+            ]
+        };
+
+        function toggleTest() { document.getElementById('test-panel').classList.toggle('active'); }
+
+        function startTest(typ) {
+            aktualniTyp = typ;
+            scoreCelkem = 0; scoreVade = 0;
+            indexyOtazek = Array.from(Array(databazeOtazek[typ].length).keys());
+            for (let i = indexyOtazek.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [indexyOtazek[i], indexyOtazek[j]] = [indexyOtazek[j], indexyOtazek[i]];
+            }
+            updateScoreDisplay();
+            document.getElementById('test-panel').classList.add('active');
+            novaOtazka();
+        }
+
+        function updateScoreDisplay() {
+            document.getElementById('val-celkem').innerText = scoreCelkem;
+            document.getElementById('val-vade').innerText = scoreVade;
+        }
+
+        function novaOtazka() {
+            if (indexyOtazek.length === 0) {
+                alert("Konec testu! Celkové skóre: " + scoreCelkem + " / 15");
+                toggleTest(); return;
+            }
+            const btn1 = document.getElementById('btn-1'), btn2 = document.getElementById('btn-2');
+            lzeKlikat = true; 
+            btn1.style.background = ""; btn2.style.background = "";
+            const okruh = databazeOtazek[aktualniTyp];
+            const index = indexyOtazek.pop();
+            const nahodna = okruh[index];
+            document.getElementById('otazka-text').innerText = nahodna.q;
+            
+            if (Math.random() > 0.5) {
+                btn1.innerText = nahodna.a[0]; btn2.innerText = nahodna.a[1];
+                aktualniSpravna = 0;
+            } else {
+                btn1.innerText = nahodna.a[1]; btn2.innerText = nahodna.a[0];
+                aktualniSpravna = 1;
+            }
+        }
+
+        function checkAnswer(index) {
+            if (!lzeKlikat) return; 
+            lzeKlikat = false;
+            const vybraneBtn = document.getElementById('btn-' + (index + 1));
+            const spravneBtn = document.getElementById('btn-' + (aktualniSpravna + 1));
+            if (index === aktualniSpravna) {
+                vybraneBtn.style.background = "#28a745"; 
+                scoreCelkem++; scoreVade++;
+            } else {
+                vybraneBtn.style.background = "#dc3545"; 
+                spravneBtn.style.background = "#28a745"; 
+                scoreVade = 0;
+            }
+            updateScoreDisplay();
+            setTimeout(novaOtazka, 1200);
+        }
+    </script>
 </head>
 <body>
 
     <nav class="navbar">
         <ul>
-            <li><a href="#uvod">Úvod</a></li>
             <li><a href="#6trida">6. Třída</a></li>
             <li><a href="#7trida">7. Třída</a></li>
             <li><a href="#8trida">8. Třída</a></li>
             <li><a href="#9trida">9. Třída</a></li>
-            <li><a href="#kontakt">Kontakt</a></li>
         </ul>
     </nav>
 
-    <section id="uvod">
-        <h1>Fyzika Srozumitelně</h1>
-        <p>Tato stránka ti pomůže pochopit fyziku bez zbytečného biflování. Stačí pochopit princip!</p>
-        <button class="tlacitko-uvod" onclick="window.location.href='#6trida';">
-            Začít se učit
-        </button>
-        <button class="tlacitko-uvod" onclick="window.location.href='index.html';">
-            Zpět na úvodní stránku
-        </button>
-    </section>
-
     <section id="6trida">
-        <h1>6. Třída: Látky a měření</h1>
-        
+        <h1>6. Třída: Hustota a Vlastnosti látek</h1>
         <details open>
-            <summary><h2>1. Hustota (Jak je to "hutné")</h2></summary>
-            <p>Představ si krabici s peřím a stejnou krabici se železem. Železo má větší <strong>hustotu</strong> – jeho částice jsou v krabici více "nacpané" u sebe.</p>
+            <summary>Hustota látek</summary>
+            <p>
+                Hustota je fyzikální veličina, která vyjadřuje hmotnost objemové jednotky látky. Zjednodušeně řečeno nám říká, jak moc je hmota "nahuštěná" v určitém prostoru. Pokud mají dvě věci stejnou velikost (objem), ale jedna je těžší, má tato věc vyšší hustotu (např. olovo vs. dřevo).
+            </p>
             <div class="vzorec-container">$$\rho = \frac{m}{V}$$</div>
-            <p><strong>&rho; (rhó)</strong> = hustota [kg/m³], <strong>m</strong> = hmotnost [kg], <strong>V</strong> = objem [m³].</p>
-        </details>
-
-        <details>
-            <summary><h2>2. Atomy a Difuze</h2></summary>
-            <p>Vše je z atomů. Ty se neustále hýbou. <strong>Difuze</strong> je, když se látky samy promíchají (třeba sirup ve vodě nebo vůně parfému ve vzduchu).</p>
-        </details>
-
-        <details>
-            <summary><h2>3. Magnety</h2></summary>
-            <p>Magnet má severní (N) a jižní (S) pól. Stejné póly se odtlačují, opačné se přitahují. Kolem je neviditelné <strong>magnetické pole</strong>.</p>
+            <p>
+                Kde &#961; (rhó) je hustota, m je hmotnost a V je objem. Základní jednotkou v soustavě SI je kilogram na metr krychlový (kg/m<sup>3</sup>).
+            </p>
+            
+            <div style="background: rgba(0, 255, 204, 0.05); border-left: 4px solid #00ffcc; padding: 15px; margin: 20px 0; border-radius: 0 12px 12px 0;">
+                <h4 style="margin:0; color:#00ffcc; font-size:0.9rem; text-transform:uppercase;">V praxi: Proč loď plave?</h4>
+                <p>Ocel má mnohem vyšší hustotu než voda, přesto se ocelová loď nepotopí. Je to díky tomu, že je loď dutá a plná vzduchu. Průměrná hustota celého objektu (ocel + vzduch uvnitř) je pak nižší než hustota vody.</p>
+            </div>
+            <button class="btn-start" onclick="startTest('hustota')">Test: Hustota (15 otázek)</button>
         </details>
     </section>
 
     <section id="7trida">
-        <h1>7. Třída: Pohyb, síla a tlak</h1>
-        
+        <h1>7. Třída: Pohyb a Tlak</h1>
         <details>
-            <summary><h2>1. Rychlost (Jak rychle pádíš)</h2></summary>
-            <p>Rychlost nám říká, jakou vzdálenost urazíme za určitý čas.</p>
+            <summary>Rychlost pohybu</summary>
+            <p>
+                Rychlost popisuje, jak rychle se těleso pohybuje nebo jakou dráhu urazí za určitý čas. Rozlišujeme rychlost okamžitou (kolik jedeme právě teď) a rychlost průměrnou (celková dráha dělená celkovým časem).
+            </p>
             <div class="vzorec-container">$$v = \frac{s}{t}$$</div>
-            <p><strong>v</strong> = rychlost [m/s nebo km/h], <strong>s</strong> = dráha, <strong>t</strong> = čas.</p>
-        </details>
-
-        <details>
-            <summary><h2>2. Síla (Tah a tlak)</h2></summary>
-            <p>Síla (F) vyjadřuje, jak moc na sebe tělesa působí. Měříme ji v Newtonech (N).</p>
-            <div class="vzorec-container">$$F = m \cdot g$$</div>
-            <p><strong>m</strong> = hmotnost [kg], <strong>g</strong> = gravitační zrychlení (na Zemi cca 10 N/kg).</p>
+            <p>
+                V základních jednotkách měříme rychlost v metrech za sekundu (m/s), v běžném životě častěji v kilometrech za hodinu (km/h). Mezi těmito jednotkami převádíme pomocí čísla 3,6.
+            </p>
             
+
+[Image of speed distance time triangle]
+
+            <div style="background: rgba(0, 255, 204, 0.05); border-left: 4px solid #00ffcc; padding: 15px; margin: 20px 0; border-radius: 0 12px 12px 0;">
+                <h4 style="margin:0; color:#00ffcc; font-size:0.9rem; text-transform:uppercase;">V praxi: Cesta do školy</h4>
+                <p>Pokud jdeš do školy 1 km a trvá ti to 12 minut, tvoje průměrná rychlost je 5 km/h. I když se občas zastavíš na semaforu (nulová rychlost), průměr počítá se vším časem.</p>
+            </div>
+            <button class="btn-start" onclick="startTest('rychlost')">Test: Rychlost (15 otázek)</button>
         </details>
 
         <details>
-            <summary><h2>3. Tření (Proč to drhne)</h2></summary>
-            <p>Tření je síla, která působí proti směru pohybu. Vzniká, když po sobě dvě tělesa kloužou. Bez tření bychom se nemohli ani rozeběhnout, ani zastavit auto.</p>
-            <ul>
-                <li><strong>Smykové tření:</strong> Když táhneš skříň po podlaze.</li>
-                <li><strong>Valivý odpor:</strong> Když použiješ kolečka (je mnohem menší než smykové tření).</li>
-            </ul>
-        </details>
-
-        <details>
-            <summary><h2>4. Tlak (Když tě tlačí bota)</h2></summary>
-            <p>Tlak (p) vyjadřuje sílu působící na plochu. Čím menší plocha (třeba ostrý nůž nebo podpatky), tím větší tlak vzniká.</p>
+            <summary>Tlak a Tlaková síla</summary>
+            <p>
+                Tlak vyjadřuje účinek síly na plochu. Čím menší je plocha, na kterou síla působí, tím větší je výsledný tlak. To je důvod, proč je ostrý nůž nebezpečnější než tupý – veškerá síla se soustředí do nepatrné plochy ostří.
+            </p>
             <div class="vzorec-container">$$p = \frac{F}{S}$$</div>
-            <p><strong>p</strong> = tlak [Pascal - Pa], <strong>F</strong> = síla [N], <strong>S</strong> = obsah plochy [m²].</p>
+            <p>Jednotkou tlaku je Pascal (Pa). Jeden Pascal je tlak, který vyvolá síla 1 Newton působící na plochu 1 metr čtvereční.</p>
             
-        </details>
-
-        <details>
-            <summary><h2>5. Páka a Kladka (Jednoduché stroje)</h2></summary>
-            <p>Pomáhají nám zvedat těžké věci menší silou.</p>
-            <ul>
-                <li><strong>Páka:</strong> Čím delší rameno, tím méně síly potřebuješ. Platí: $$F_1 \cdot r_1 = F_2 \cdot r_2$$</li>
-                <li><strong>Kladka:</strong> Pevná kladka mění směr síly, volná kladka ti ušetří polovinu síly.</li>
-            </ul>
-            
-            
-
-[Image of fixed and movable pulleys]
-
-        </details>
-
-        <details>
-            <summary><h2>6. Archimédův zákon (Nadnášení)</h2></summary>
-            <p>Voda tě nadnáší silou, která je stejně velká jako váha vytlačené vody.</p>
-            <div class="vzorec-container">$$F_{vz} = V \cdot \rho_{kap} \cdot g$$</div>
-            
-
-[Image of Archimedes' principle]
-
-        </details>
-
-        <details>
-            <summary><h2>7. Atmosférický tlak</h2></summary>
-            <p>Vzduch nad námi váží tisíce tun a tlačí na nás ze všech stran. Cítíme to třeba jako zalehnutí v uších v letadle.</p>
+            <div style="background: rgba(0, 255, 204, 0.05); border-left: 4px solid #00ffcc; padding: 15px; margin: 20px 0; border-radius: 0 12px 12px 0;">
+                <h4 style="margin:0; color:#00ffcc; font-size:0.9rem; text-transform:uppercase;">V praxi: Záchrana na ledě</h4>
+                <p>Pokud se pod někým proboří led, záchranář se k němu nepřibližuje chůzí, ale plazením. Rozloží tak svoji váhu na mnohem větší plochu těla, čímž sníží tlak na led a zabrání dalšímu praskání.</p>
+            </div>
+            <button class="btn-start" onclick="startTest('tlak')">Test: Tlak (15 otázek)</button>
         </details>
     </section>
 
     <section id="8trida">
-        <h1>8. Třída: Energie, teplo a světlo</h1>
-        
+        <h1>8. Třída: Práce, Energie a Teplo</h1>
         <details>
-            <summary><h2>1. Práce a Výkon</h2></summary>
-            <p><strong>Práce</strong> se koná, když silou něco posuneš. <strong>Výkon</strong> říká, jak rychle tu práci uděláš.</p>
-            <div class="vzorec-container">$$W = F \cdot s \quad | \quad P = \frac{W}{t}$$</div>
-            <p><strong>W</strong> = práce [J], <strong>P</strong> = výkon [W].</p>
+            <summary>Mechanická práce a Výkon</summary>
+            <p>
+                V běžné mluvě je práce všechno, co nás unaví. Ve fyzice se ale práce koná jen tehdy, pokud těleso silou posouváme po určité dráze. Pokud tlačíte do zdi a ta se nepohne, fyzikálně jste nevykonali žádnou práci, i když jste se zpotili.
+            </p>
+            <div class="vzorec-container">$$W = F \cdot s$$</div>
+            <p>
+                Výkon (P) nám pak říká, jak rychle byla práce vykonána. Jednotkou práce je Joule (J), jednotkou výkonu Watt (W).
+            </p>
+            <div style="background: rgba(0, 255, 204, 0.05); border-left: 4px solid #00ffcc; padding: 15px; margin: 20px 0; border-radius: 0 12px 12px 0;">
+                <h4 style="margin:0; color:#00ffcc; font-size:0.9rem; text-transform:uppercase;">V praxi: Schody vs. Výtah</h4>
+                <p>Když vyjedeš do 5. patra výtahem, vykoná se stejná práce, jako když tam dojdeš pěšky (překonává se stejná výška). Rozdíl je ve výkonu – výtah to zvládne za pár sekund, ty za minutu.</p>
+            </div>
+            <button class="btn-start" onclick="startTest('prace')">Test: Práce (15 otázek)</button>
         </details>
 
         <details>
-            <summary><h2>2. Teplo</h2></summary>
-            <p>Teplo je energie, která teče z teplejšího na studenější předmět.</p>
-            <div class="vzorec-container">$$Q = m \cdot c \cdot (t_2 - t_1)$$</div>
-        </details>
-
-        <details>
-            <summary><h2>3. Optika (Zrcadla a čočky)</h2></summary>
-            <p>Světlo se odráží (zrcadla) nebo láme (voda, sklo, čočky). Díky tomu fungují brýle, lupy nebo tvoje oči.</p>
+            <summary>Teplo a Teplota</summary>
+            <p>
+                Teplo je druh energie, kterou si mezi sebou vyměňují tělesa s různou teplotou. Teplo se vždy šíří z teplejšího místa na studenější, dokud se teploty nevyrovnají. Tomuto procesu říkáme tepelná výměna.
+            </p>
+            <div class="vzorec-container">$$Q = m \cdot c \cdot \Delta t$$</div>
+            <p>
+                Zde Q je přijaté nebo odevzdané teplo, m hmotnost, c měrná tepelná kapacita látky a &Delta; t změna teploty.
+            </p>
             
 
-[Image of refraction of light through a prism]
+[Image of conduction convection and radiation]
 
+            <div style="background: rgba(0, 255, 204, 0.05); border-left: 4px solid #00ffcc; padding: 15px; margin: 20px 0; border-radius: 0 12px 12px 0;">
+                <h4 style="margin:0; color:#00ffcc; font-size:0.9rem; text-transform:uppercase;">V praxi: Proč voda vře déle než olej?</h4>
+                <p>Voda má velmi vysokou tepelnou kapacitu (c). To znamená, že k ohřátí 1 kg vody o 1 stupeň potřebujeme mnohem více energie než u většiny jiných látek. Díky tomu oceány fungují jako obrovské zásobníky tepla, které v zimě ohřívají pevninu.</p>
+            </div>
+            <button class="btn-start" onclick="startTest('teplo')">Test: Teplo (15 otázek)</button>
         </details>
     </section>
 
     <section id="9trida">
-        <h1>9. Třída: Elektřina, jádro a vesmír</h1>
-        
+        <h1>9. Třída: Elektřina a Obvody</h1>
         <details>
-            <summary><h2>1. Ohmův zákon (Elektrický okruh)</h2></summary>
-            <p>Základní vztah mezi proudem, napětím a odporem.</p>
+            <summary>Ohmův zákon</summary>
+            <p>
+                Ohmův zákon je základem celé elektrotechniky. Popisuje vztah mezi elektrickým napětím ($U$), proudem ($I$) a odporem ($R$). Napětí si můžeme představit jako tlak vody v trubce, proud jako množství protékající vody a odpor jako zúžení trubky, které průtoku brání.
+            </p>
             <div class="vzorec-container">$$I = \frac{U}{R}$$</div>
-            <p><strong>I</strong> = proud [A], <strong>U</strong> = napětí [V], <strong>R</strong> = odpor [Ω].</p>
+            <p>Základní jednotky jsou Ampér (A), Volt (V) a Ohm (&Omega;).</p>
+            
+            <button class="btn-start" onclick="startTest('ohm')">Test: Ohmův zákon (15 otázek)</button>
         </details>
 
         <details>
-            <summary><h2>2. Sériové a paralelní zapojení</h2></summary>
-            <p>Existují dva základní způsoby, jak zapojit součástky (třeba žárovky) v obvodu:</p>
-            <ul>
-                <li><strong>Sériové (za sebou):</strong> Proud prochází postupně všemi součástkami. Pokud se jedna žárovka rozbije, celý obvod se přeruší a nesvítí nic. $$R_{celk} = R_1 + R_2$$</li>
-                <li><strong>Paralelní (vedle sebe):</strong> Proud se dělí do větví. Pokud se jedna žárovka rozbije, ostatní svítí dál. Takhle jsou zapojené zásuvky v domě. $$\frac{1}{R_{celk}} = \frac{1}{R_1} + \frac{1}{R_2}$$</li>
-            </ul>
+            <summary>Sériové a Paralelní zapojení</summary>
+            <p>
+                Elektrické součástky můžeme v obvodu zapojit dvěma základními způsoby. V <b>sériovém zapojení</b> jsou součástky "v řadě". Proud protéká jednou po druhé. Pokud se jedna přeruší, celý obvod přestane fungovat.
+            </p>
             
 
-[Image of series vs parallel circuit diagrams]
+[Image of series vs parallel circuit diagram]
 
-        </details>
-
-        <details>
-            <summary><h2>3. Jaderná fyzika</h2></summary>
-            <p>Zkoumá nitro atomu. Rozpadem jader získáváme obrovské množství energie v jaderných elektrárnách.</p>
-        </details>
-
-        <details>
-            <summary><h2>4. Vesmír</h2></summary>
-            <p>Naše Země je součástí Sluneční soustavy. Vše ve vesmíru drží pohromadě <strong>gravitace</strong>.</p>
+            <p>
+                V <b>paralelním zapojení</b> jsou součástky "vedle sebe" v samostatných větvích. Každá větev může fungovat nezávisle na ostatních.
+            </p>
+            <ul>
+                <li><b>Sériově:</b> U = U<sub>1</sub> + U<sub>2</sub>, proud I je všude stejný.</li>
+                <li><b>Paralelně:</b> I = I<sub>1</sub> + I<sub>2</sub>, napětí U je všude stejné.</li>
+            </ul>
+            <img src="obvod_S.png" alt="Sériové zapojení">
+            <img src="obvod_P.png" alt="Paralelní zapojení">
+            <div style="background: rgba(0, 255, 204, 0.05); border-left: 4px solid #00ffcc; padding: 15px; margin: 20px 0; border-radius: 0 12px 12px 0;">
+                <h4 style="margin:0; color:#00ffcc; font-size:0.9rem; text-transform:uppercase;">V praxi: Domovní instalace</h4>
+                <p>Všechny zásuvky v bytě jsou zapojeny paralelně. Díky tomu můžete v obýváku zhasnout lampu, aniž by se vypnul počítač nebo lednice. Kdyby byly zapojeny sériově, musely by být zapnuté všechny spotřebiče najednou, aby obvodem tekl proud.</p>
+            </div>
+            <button class="btn-start" onclick="startTest('obvody')">Test: Druhy obvodů (15 otázek)</button>
         </details>
     </section>
 
-    <section id="kontakt">
-        <h1>Kontakt</h1>
-        <p>Email: <a href="mailto:david.z.kontakt@gmail.com" style="color: #40b3ff;">david.z.kontakt@gmail.com</a></p>
-    </section>
+    <div id="test-panel" class="test-panel">
+        <div class="score-container">
+            <div class="score-item">V řadě: <span id="val-vade" class="score-value">0</span></div>
+            <div class="score-item">Správně: <span id="val-celkem" class="score-value">0</span></div>
+        </div>
+        <p id="otazka-text" style="font-size: 1.3rem; margin-bottom: 25px;"></p>
+        <div class="moznosti">
+            <button id="btn-1" onclick="checkAnswer(0)"></button>
+            <button id="btn-2" onclick="checkAnswer(1)"></button>
+        </div>
+        <button class="zavrit-test" onclick="toggleTest()">× ZAVŘÍT TEST</button>
+    </div>
 
 </body>
 </html>
