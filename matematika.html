@@ -9,6 +9,22 @@
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
+    <style>
+        /* Styly pro skóre v testovacím panelu */
+        .score-container {
+            display: flex;
+            justify-content: space-around;
+            background: #222;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #444;
+        }
+        .score-item { text-align: center; font-size: 0.9em; color: #ccc; }
+        .score-value { display: block; font-size: 1.4em; color: #00b7ff; font-weight: bold; }
+        #otazka-text { font-size: 1.3em; margin: 20px 0; min-height: 1.5em; }
+    </style>
+
     <script>
         window.MathJax = {
           tex: {
@@ -20,14 +36,44 @@
         let aktualniSpravna = 0;
         let aktualniTyp = '';
         let lzeKlikat = true; 
+        
+        // Proměnné pro skóre a sledování otázek
+        let scoreCelkem = 0;
+        let scoreVade = 0;
+        let indexyOtazek = []; 
 
         const databazeOtazek = {
             'desetinna': [
-                { q: "Kolik je 0,5 + 0,2?", a: ["0,7", "0,07"], ok: 0 },
-                { q: "Musí být čárky pod sebou?", a: ["Ano", "Ne"], ok: 0 },
-                { q: "1,2 + 0,05 =", a: ["1,25", "1,7"], ok: 0 },
-                { q: "Kolik je 0,1 + 0,9?", a: ["1", "0,1"], ok: 0 },
-                { q: "0,3 - 0,1 =", a: ["0,02", "0,2"], ok: 1 },
+                { q: "Kolik je 0,4 + 0,3?", a: ["0,07", "0,7"], ok: 1 },
+                { q: "0,8 - 0,5 =", a: ["0,3", "0,03"], ok: 0 },
+                { q: "Je 0,5 totéž jako 0,50?", a: ["Ne", "Ano"], ok: 1 },
+                { q: "1,5 + 0,5 =", a: ["2,0", "1,10"], ok: 0 },
+                { q: "0,25 + 0,25 =", a: ["0,05", "0,5"], ok: 1 },
+                { q: "Kolik je 1 - 0,1?", a: ["0,9", "0,09"], ok: 0 },
+                { q: "0,7 + 0,03 =", a: ["0,10", "0,73"], ok: 1 },
+                { q: "2,4 - 1,2 =", a: ["1,2", "1,0"], ok: 0 },
+                { q: "Kolik je 0,05 + 0,05?", a: ["0,01", "0,1"], ok: 1 },
+                { q: "0,9 - 0,9 =", a: ["0", "0,1"], ok: 0 },
+                { q: "1,1 + 0,11 =", a: ["1,111", "1,21"], ok: 1 },
+                { q: "Kolik je 5 + 0,5?", a: ["5,5", "1,0"], ok: 0 },
+                { q: "3,2 - 0,2 =", a: ["3,18", "3"], ok: 1 },
+                { q: "Můžeme na konec desetinného čísla přidat nulu?", a: ["Ano", "Ne"], ok: 0 },
+                { q: "0,12 + 0,12 =", a: ["0,1212", "0,24"], ok: 1 },
+                { q: "Kolik je 0,6 + 0,4?", a: ["1", "0,10"], ok: 0 },
+                { q: "1,3 - 0,05 =", a: ["1,35", "1,25"], ok: 1 },
+                { q: "0,001 + 0,01 =", a: ["0,011", "0,0011"], ok: 0 },
+                { q: "Které číslo je větší: 0,2 nebo 0,18?", a: ["0,18", "0,2"], ok: 1 },
+                { q: "Kolik je 10 - 0,5?", a: ["9,5", "10,5"], ok: 0 },
+                { q: "0,45 + 0,55 =", a: ["0,100", "1"], ok: 1 },
+                { q: "2,5 + 1,25 =", a: ["3,75", "3,52"], ok: 0 },
+                { q: "Kolik je 0,15 - 0,1?", a: ["0,14", "0,05"], ok: 1 },
+                { q: "Je 0,7 větší než 0,07?", a: ["Ano", "Ne"], ok: 0 },
+                { q: "0,99 + 0,01 =", a: ["0,100", "1"], ok: 1 },
+                { q: "Kolik je 4,8 - 2,4?", a: ["2,4", "2,2"], ok: 0 },
+                { q: "0,1 + 0,2 + 0,3 =", a: ["0,06", "0,6"], ok: 1 },
+                { q: "7,5 - 5 =", a: ["2,5", "7,0"], ok: 0 },
+                { q: "Kolik je 0,02 + 0,002?", a: ["0,04", "0,022"], ok: 1 },
+                { q: "0,85 - 0,8 =", a: ["0,05", "0,5"], ok: 0 }
             ],
             'uhly': [
                 { q: "Jaký úhel má 90°?", a: ["Pravý", "Ostrý"], ok: 0 },
@@ -77,23 +123,45 @@
 
         function startTest(typ) {
             aktualniTyp = typ;
+            scoreCelkem = 0;
+            scoreVade = 0;
+            // Příprava indexů otázek pro náhodné pořadí bez opakování
+            indexyOtazek = Array.from(Array(databazeOtazek[typ].length).keys());
+            for (let i = indexyOtazek.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [indexyOtazek[i], indexyOtazek[j]] = [indexyOtazek[j], indexyOtazek[i]];
+            }
+            
+            updateScoreDisplay();
             document.getElementById('test-panel').classList.add('active');
             novaOtazka();
         }
 
+        function updateScoreDisplay() {
+            document.getElementById('val-celkem').innerText = scoreCelkem;
+            document.getElementById('val-vade').innerText = scoreVade;
+        }
+
         function novaOtazka() {
+            if (indexyOtazek.length === 0) {
+                const znovu = confirm("Gratulujeme! Prošel jsi všechny otázky v této kategorii.\nCelkové skóre: " + scoreCelkem + "\nChceš začít znovu?");
+                if (znovu) startTest(aktualniTyp);
+                else toggleTest();
+                return;
+            }
+
             const btn1 = document.getElementById('btn-1');
             const btn2 = document.getElementById('btn-2');
             
-            // OKAMŽITÝ RESET STAVU
             lzeKlikat = true; 
             btn1.disabled = false;
             btn2.disabled = false;
             btn1.style.background = "#333";
             btn2.style.background = "#333";
 
-            const okruh = databazeOtazek[aktualniTyp] || databazeOtazek['desetinna'];
-            const nahodna = okruh[Math.floor(Math.random() * okruh.length)];
+            const okruh = databazeOtazek[aktualniTyp];
+            const index = indexyOtazek.pop();
+            const nahodna = okruh[index];
             
             document.getElementById('otazka-text').innerText = nahodna.q;
             btn1.innerText = nahodna.a[0];
@@ -109,23 +177,20 @@
             if (!lzeKlikat) return; 
             lzeKlikat = false;
 
-            const btn1 = document.getElementById('btn-1');
-            const btn2 = document.getElementById('btn-2');
             const vybraneBtn = document.getElementById('btn-' + (index + 1));
             const spravneBtn = document.getElementById('btn-' + (aktualniSpravna + 1));
 
-            // Zablokování a obarvení
-            btn1.disabled = true;
-            btn2.disabled = true;
-
             if (index === aktualniSpravna) {
                 vybraneBtn.style.background = "#28a745"; 
+                scoreCelkem++;
+                scoreVade++;
             } else {
                 vybraneBtn.style.background = "#dc3545"; 
                 spravneBtn.style.background = "#28a745"; 
+                scoreVade = 0; // Reset série při chybě
             }
 
-            // Po 1 sekundě se zavolá nová otázka, která vše odblokuje
+            updateScoreDisplay();
             setTimeout(novaOtazka, 1000);
         }
     </script>
@@ -230,7 +295,6 @@
         </details>
         <details>
             <summary><h2>3. Pythagorova věta</h2></summary>
-            
             <p>Používáme pro výpočet stran v pravoúhlém trojúhelníku.</p>
             <div class="vzorec-container">$$a^2 + b^2 = c^2$$</div>
             <img src="pyth.png" alt="Pythagorova věta">
@@ -248,25 +312,21 @@
         </details>
         <details>
             <summary><h2>2. Funkce</h2></summary>
-            
             <p>Lineární funkce má předpis: $y = ax + b$. Grafem je vždy přímka.</p>
         </details>
         <details>
             <summary><h2>3. Jehlan</h2></summary>
-            
             <div class="vzorec-container">$$V = \frac{1}{3} S_p \cdot v$$ $$S = S_p + S_{pl}$$</div>
             <p><strong>$S_p$</strong> = obsah podstavy, <strong>$v$</strong> = výška jehlanu, <strong>$S_{pl}$</strong> = obsah pláště.</p>
             <button class="btn-start" onclick="startTest('telesa')">Spustit test</button>
         </details>
         <details>
             <summary><h2>4. Kužel</h2></summary>
-            
             <div class="vzorec-container">$$V = \frac{1}{3} \pi r^2 v$$ $$S = \pi r^2 + \pi r s$$</div>
             <p><strong>$r$</strong> = poloměr, <strong>$v$</strong> = výška, <strong>$s$</strong> = strana kužele.</p>
         </details>
         <details>
             <summary><h2>5. Koule</h2></summary>
-            
             <div class="vzorec-container">$$V = \frac{4}{3} \pi r^3$$ $$S = 4 \pi r^2$$</div>
         </details>
     </section>
@@ -278,7 +338,14 @@
 
     <div id="test-panel" class="test-panel">
         <h3 id="test-nazev">Procvičování</h3>
+        
+        <div class="score-container">
+            <div class="score-item">V kuse: <span id="val-vade" class="score-value">0</span></div>
+            <div class="score-item">Celkem správně: <span id="val-celkem" class="score-value">0</span></div>
+        </div>
+
         <p id="otazka-text"></p>
+        
         <div class="moznosti">
             <button id="btn-1" onclick="checkAnswer(0)"></button>
             <button id="btn-2" onclick="checkAnswer(1)"></button>
