@@ -10,7 +10,6 @@
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     
     <style>
-        /* Styly pro skóre v testovacím panelu */
         .score-container {
             display: flex;
             justify-content: space-around;
@@ -26,112 +25,198 @@
     </style>
 
     <script>
-        window.MathJax = {
-          tex: {
-            inlineMath: [['$', '$'], ['\\(', '\\)']]
-          }
-        };
+        window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
 
-        // --- LOGIKA TESTŮ ---
         let aktualniSpravna = 0;
         let aktualniTyp = '';
         let lzeKlikat = true; 
-        
-        // Proměnné pro skóre a sledování otázek
         let scoreCelkem = 0;
         let scoreVade = 0;
         let indexyOtazek = []; 
 
         const databazeOtazek = {
             'desetinna': [
-                { q: "Kolik je 0,4 + 0,3?", a: ["0,07", "0,7"], ok: 1 },
+                { q: "0,4 + 0,3 =", a: ["0,7", "0,07"], ok: 0 },
                 { q: "0,8 - 0,5 =", a: ["0,3", "0,03"], ok: 0 },
-                { q: "Je 0,5 totéž jako 0,50?", a: ["Ne", "Ano"], ok: 1 },
+                { q: "Je 0,5 totéž jako 0,50?", a: ["Ano", "Ne"], ok: 0 },
                 { q: "1,5 + 0,5 =", a: ["2,0", "1,10"], ok: 0 },
-                { q: "0,25 + 0,25 =", a: ["0,05", "0,5"], ok: 1 },
-                { q: "Kolik je 1 - 0,1?", a: ["0,9", "0,09"], ok: 0 },
-                { q: "0,7 + 0,03 =", a: ["0,10", "0,73"], ok: 1 },
+                { q: "0,25 + 0,25 =", a: ["0,5", "0,05"], ok: 0 },
+                { q: "1 - 0,1 =", a: ["0,9", "0,09"], ok: 0 },
+                { q: "0,7 + 0,03 =", a: ["0,73", "0,10"], ok: 0 },
                 { q: "2,4 - 1,2 =", a: ["1,2", "1,0"], ok: 0 },
-                { q: "Kolik je 0,05 + 0,05?", a: ["0,01", "0,1"], ok: 1 },
+                { q: "0,05 + 0,05 =", a: ["0,1", "0,01"], ok: 0 },
                 { q: "0,9 - 0,9 =", a: ["0", "0,1"], ok: 0 },
-                { q: "1,1 + 0,11 =", a: ["1,111", "1,21"], ok: 1 },
-                { q: "Kolik je 5 + 0,5?", a: ["5,5", "1,0"], ok: 0 },
-                { q: "3,2 - 0,2 =", a: ["3,18", "3"], ok: 1 },
-                { q: "Můžeme na konec desetinného čísla přidat nulu?", a: ["Ano", "Ne"], ok: 0 },
-                { q: "0,12 + 0,12 =", a: ["0,1212", "0,24"], ok: 1 },
-                { q: "Kolik je 0,6 + 0,4?", a: ["1", "0,10"], ok: 0 },
-                { q: "1,3 - 0,05 =", a: ["1,35", "1,25"], ok: 1 },
-                { q: "0,001 + 0,01 =", a: ["0,011", "0,0011"], ok: 0 },
-                { q: "Které číslo je větší: 0,2 nebo 0,18?", a: ["0,18", "0,2"], ok: 1 },
-                { q: "Kolik je 10 - 0,5?", a: ["9,5", "10,5"], ok: 0 },
-                { q: "0,45 + 0,55 =", a: ["0,100", "1"], ok: 1 },
-                { q: "2,5 + 1,25 =", a: ["3,75", "3,52"], ok: 0 },
-                { q: "Kolik je 0,15 - 0,1?", a: ["0,14", "0,05"], ok: 1 },
-                { q: "Je 0,7 větší než 0,07?", a: ["Ano", "Ne"], ok: 0 },
-                { q: "0,99 + 0,01 =", a: ["0,100", "1"], ok: 1 },
-                { q: "Kolik je 4,8 - 2,4?", a: ["2,4", "2,2"], ok: 0 },
-                { q: "0,1 + 0,2 + 0,3 =", a: ["0,06", "0,6"], ok: 1 },
-                { q: "7,5 - 5 =", a: ["2,5", "7,0"], ok: 0 },
-                { q: "Kolik je 0,02 + 0,002?", a: ["0,04", "0,022"], ok: 1 },
-                { q: "0,85 - 0,8 =", a: ["0,05", "0,5"], ok: 0 }
+                { q: "1,1 + 0,11 =", a: ["1,21", "1,111"], ok: 0 },
+                { q: "5 + 0,5 =", a: ["5,5", "1,0"], ok: 0 },
+                { q: "3,2 - 0,2 =", a: ["3", "3,18"], ok: 0 },
+                { q: "0,12 + 0,12 =", a: ["0,24", "0,1212"], ok: 0 },
+                { q: "10 - 0,5 =", a: ["9,5", "10,5"], ok: 0 }
             ],
             'uhly': [
                 { q: "Jaký úhel má 90°?", a: ["Pravý", "Ostrý"], ok: 0 },
                 { q: "Úhel 180° je:", a: ["Přímý", "Plný"], ok: 0 },
                 { q: "Je 120° tupý úhel?", a: ["Ano", "Ne"], ok: 0 },
                 { q: "Úhel 360° je:", a: ["Plný", "Přímý"], ok: 0 },
-                { q: "Úhel 270° je:", a: ["Tupý", "Plný"], ok: 0 }
+                { q: "Úhel 45° je:", a: ["Ostrý", "Tupý"], ok: 0 },
+                { q: "Součet vedlejších úhlů je:", a: ["180°", "90°"], ok: 0 },
+                { q: "Úhel 270° je:", a: ["Neconvexní", "Tupý"], ok: 0 },
+                { q: "Vrcholové úhly jsou:", a: ["Shodné", "Různé"], ok: 0 },
+                { q: "Kolik minut má 1 stupeň?", a: ["60'", "100'"], ok: 0 },
+                { q: "Úhel 91° je:", a: ["Tupý", "Pravý"], ok: 0 },
+                { q: "Doplňkový úhel k 30° do 90° je:", a: ["60°", "150°"], ok: 0 },
+                { q: "Vedlejší úhel k 100° je:", a: ["80°", "10°"], ok: 0 },
+                { q: "Pravý úhel se značí:", a: ["Tečkou v obloučku", "Křížkem"], ok: 0 },
+                { q: "Úhel 0° až 90° (bez nich) je:", a: ["Ostrý", "Tupý"], ok: 0 },
+                { q: "Součet vnitřních úhlů v trojúhelníku:", a: ["180°", "360°"], ok: 0 }
             ],
             'zlomky': [
                 { q: "1/2 + 1/2 =", a: ["1", "1/4"], ok: 0 },
                 { q: "Horní číslo je:", a: ["Čitatel", "Jmenovatel"], ok: 0 },
-                { q: "1/3 + 1/6 =", a: ["1/2", "1/9"], ok: 0 },
-                { q: "1/4 - 1/4 =", a: ["0", "1/8"], ok: 0 },
-                { q: "1/5 + 2/5 =", a: ["3/10", "3/5"], ok: 1 }
+                { q: "1/3 + 1/6 =", a: ["1/2", "2/9"], ok: 0 },
+                { q: "Polovina ze 1/4 je:", a: ["1/8", "1/2"], ok: 0 },
+                { q: "Zlomek 5/5 je roven:", a: ["1", "5"], ok: 0 },
+                { q: "Zlomek 2/4 v zákl. tvaru:", a: ["1/2", "1/4"], ok: 0 },
+                { q: "3/4 - 1/4 =", a: ["1/2", "2/0"], ok: 0 },
+                { q: "Převrácené číslo k 5/2:", a: ["2/5", "-5/2"], ok: 0 },
+                { q: "2 * 1/4 =", a: ["1/2", "2/8"], ok: 0 },
+                { q: "Zlomek 10/2 je:", a: ["5", "20"], ok: 0 },
+                { q: "Je 1/3 větší než 1/4?", a: ["Ano", "Ne"], ok: 0 },
+                { q: "Smíšené číslo 1 a 1/2 je:", a: ["3/2", "2/2"], ok: 0 },
+                { q: "Rozšiř 1/2 číslem 3:", a: ["3/6", "4/5"], ok: 0 },
+                { q: "Krácení zlomku znamená:", a: ["Dělení čit. i jmen.", "Mínus"], ok: 0 },
+                { q: "1 - 1/3 =", a: ["2/3", "0"], ok: 0 }
             ],
             'procenta': [
-                { q: "100 % je vždy:", a: ["Základ", "Polovina"], ok: 0 },
+                { q: "100 % je:", a: ["Základ", "Polovina"], ok: 0 },
                 { q: "50 % ze 200 je:", a: ["100", "50"], ok: 0 },
-                { q: "1 % z 500 je:", a: ["50", "5"], ok: 1 },
-                { q: "Procenta jsou částí:", a: ["Polovyny", "Celku"], ok: 1 },
-                { q: "Trojčlenka se používá pro:", a: ["Výpočet neznámé hodnoty", "Sčítání zlomků"], ok: 0 }
+                { q: "1 % z 500 je:", a: ["5", "50"], ok: 1 },
+                { q: "Čtvrtina v procentech:", a: ["25 %", "40 %"], ok: 0 },
+                { q: "Desetina v procentech:", a: ["10 %", "1 %"], ok: 0 },
+                { q: "Cena 200 Kč + 10 % daně:", a: ["220 Kč", "210 Kč"], ok: 0 },
+                { q: "20 % ze 100 je:", a: ["20", "2"], ok: 0 },
+                { q: "75 % je jako zlomek:", a: ["3/4", "1/4"], ok: 0 },
+                { q: "Zvětšení o 100 % znamená:", a: ["Dvojnásobek", "Stejně"], ok: 0 },
+                { q: "0,5 vyjádřeno v procentech:", a: ["50 %", "5 %"], ok: 0 },
+                { q: "Základ je vždy:", a: ["100 %", "1 %"], ok: 0 },
+                { q: "Promile je:", a: ["Jedna tisícina", "Jedna setina"], ok: 0 },
+                { q: "Kolik procent je 1/5?", a: ["20 %", "5 %"], ok: 0 },
+                { q: "Původní cena 50, sleva 50 %:", a: ["25", "0"], ok: 0 },
+                { q: "Trojčlenka počítá:", a: ["Poměry", "Mocniny"], ok: 0 }
             ],
             'mocniny': [
-                { q: "Kolik je 3²?", a: ["9", "6"], ok: 0 },
-                { q: "Odmocnina z 16 je:", a: ["4", "8"], ok: 0 },
-                { q: "Kolik je 2³?", a: ["6", "8"], ok: 1 },
-                { q: "Odmocnina z 25 je:", a: ["5", "10"], ok: 0 },
-                { q: "Kolik je 5²?", a: ["10", "25"], ok: 1 }
+                { q: "3² =", a: ["9", "6"], ok: 0 },
+                { q: "Odmocnina z 16:", a: ["4", "8"], ok: 0 },
+                { q: "2³ =", a: ["8", "6"], ok: 0 },
+                { q: "(-2)² =", a: ["4", "-4"], ok: 0 },
+                { q: "5⁰ =", a: ["1", "0"], ok: 0 },
+                { q: "10³ =", a: ["1000", "100"], ok: 0 },
+                { q: "Odmocnina z 100:", a: ["10", "50"], ok: 0 },
+                { q: "4² =", a: ["16", "8"], ok: 0 },
+                { q: "1⁵ =", a: ["1", "5"], ok: 0 },
+                { q: "0² =", a: ["0", "1"], ok: 0 },
+                { q: "a² * a³ =", a: ["a⁵", "a⁶"], ok: 0 },
+                { q: "√49 =", a: ["7", "9"], ok: 0 },
+                { q: "√1 =", a: ["1", "0"], ok: 0 },
+                { q: "11² =", a: ["121", "111"], ok: 0 },
+                { q: "2⁴ =", a: ["16", "8"], ok: 0 }
             ],
             'pythagoras': [
-                { q: "Vzorec zní:", a: ["a²+b²=c²", "a+b=c"], ok: 0 },
-                { q: "Platí v pravoúhlém trojúhelníku?", a: ["Ano", "Ne"], ok: 0 }
+                { q: "Vzorec:", a: ["a²+b²=c²", "a+b=c"], ok: 0 },
+                { q: "Platí pro trojúhelník:", a: ["Pravoúhlý", "Obecný"], ok: 0 },
+                { q: "Nejdelší strana je:", a: ["Přepona", "Odvěsna"], ok: 0 },
+                { q: "Strana c se nazývá:", a: ["Přepona", "Výška"], ok: 0 },
+                { q: "Když a=3, b=4, pak c=?", a: ["5", "7"], ok: 0 },
+                { q: "Pravý úhel je naproti:", a: ["Přeponě", "Odvěsně"], ok: 0 },
+                { q: "Platí věta i pro tupý úhel?", a: ["Ne", "Ano"], ok: 0 },
+                { q: "Vzorec pro odvěsnu a²:", a: ["c² - b²", "c² + b²"], ok: 0 },
+                { q: "Když a=6, b=8, pak c=?", a: ["10", "14"], ok: 0 },
+                { q: "Je trojúhelník 1, 1, 2 pravoúhlý?", a: ["Ne", "Ano"], ok: 0 },
+                { q: "Pythagoras byl:", a: ["Řek", "Říman"], ok: 0 },
+                { q: "Odvěsny svírají úhel:", a: ["90°", "180°"], ok: 0 },
+                { q: "Když c=13, a=5, pak b=?", a: ["12", "8"], ok: 0 },
+                { q: "Součet čtverců nad odvěsnami = ", a: ["čtverci nad přeponou", "obvodu"], ok: 0 },
+                { q: "Může být přepona kratší než odvěsna?", a: ["Ne", "Ano"], ok: 0 }
             ],
             'rovnice': [
-                { q: "x + 10 = 15, x = ?", a: ["5", "25"], ok: 0 },
-                { q: "2x = 10, x = ?", a: ["5", "20"], ok: 0 }
+                { q: "x + 5 = 10, x = ?", a: ["5", "15"], ok: 0 },
+                { q: "2x = 20, x = ?", a: ["10", "40"], ok: 0 },
+                { q: "x - 3 = 7, x = ?", a: ["10", "4"], ok: 0 },
+                { q: "x / 2 = 5, x = ?", a: ["10", "2.5"], ok: 0 },
+                { q: "3x = 0, x = ?", a: ["0", "3"], ok: 0 },
+                { q: "x + x = 10, x = ?", a: ["5", "10"], ok: 0 },
+                { q: "10 - x = 2, x = ?", a: ["8", "12"], ok: 0 },
+                { q: "2x + 1 = 5, x = ?", a: ["2", "3"], ok: 0 },
+                { q: "x / 4 = 1, x = ?", a: ["4", "0.25"], ok: 0 },
+                { q: "5x = 5, x = ?", a: ["1", "0"], ok: 0 },
+                { q: "x - 10 = -5, x = ?", a: ["5", "-15"], ok: 0 },
+                { q: "Je x=2 řešením 3x=6?", a: ["Ano", "Ne"], ok: 0 },
+                { q: "0 * x = 0, x je:", a: ["Libovolné číslo", "Jen nula"], ok: 0 },
+                { q: "x + 1 = x + 1, řešení:", a: ["Nekonečno", "Žádné"], ok: 0 },
+                { q: "2x = x + 3, x = ?", a: ["3", "1"], ok: 0 }
             ],
-            'telesa': [
-                { q: "Koule má poloměr:", a: ["r", "v"], ok: 0 },
-                { q: "Kužel má podstavu:", a: ["Kruh", "Čtverec"], ok: 0 }
+            'jehlan': [
+                { q: "Vzorec pro objem V:", a: ["1/3 * Sp * v", "Sp * v"], ok: 0 },
+                { q: "Podstava může být:", a: ["Čtverec", "Pouze kruh"], ok: 0 },
+                { q: "Kolik vrcholů má čtyřboký jehlan?", a: ["5", "4"], ok: 0 },
+                { q: "Vzorec pro povrch S:", a: ["Sp + Spl", "Sp * v"], ok: 0 },
+                { q: "Stěny pláště jsou:", a: ["Trojúhelníky", "Čtverce"], ok: 0 },
+                { q: "Výška jehlanu je:", a: ["Kolmice k podstavě", "Hrana"], ok: 0 },
+                { q: "Sp značí:", a: ["Obsah podstavy", "Spodní stranu"], ok: 0 },
+                { q: "Spl značí:", a: ["Obsah pláště", "Spodní plochu"], ok: 0 },
+                { q: "Pravidelný jehlan má podstavu:", a: ["Pravidelný mnohoúhelník", "Obdélník"], ok: 0 },
+                { q: "Objem s Sp=10, v=3:", a: ["10", "30"], ok: 0 },
+                { q: "Jehlan s kruhovou podstavou je:", a: ["Kužel", "Válec"], ok: 0 },
+                { q: "Má jehlan dvě podstavy?", a: ["Ne", "Ano"], ok: 0 },
+                { q: "Hrana podstavy se značí:", a: ["a", "v"], ok: 0 },
+                { q: "Boční hrana se značí:", a: ["h (nebo s)", "p"], ok: 0 },
+                { q: "Pravidelný čtyřboký jehlan má kolik hran?", a: ["8", "4"], ok: 0 }
+            ],
+            'kuzel': [
+                { q: "Podstava kuželu je:", a: ["Kruh", "Čtverec"], ok: 0 },
+                { q: "Vzorec pro objem V:", a: ["1/3 * pi * r² * v", "pi * r² * v"], ok: 0 },
+                { q: "Strana kužele se značí:", a: ["s", "a"], ok: 0 },
+                { q: "Vzorec pro povrch S:", a: ["pi*r² + pi*r*s", "2*pi*r"], ok: 0 },
+                { q: "r značí:", a: ["Poloměr", "Průměr"], ok: 0 },
+                { q: "v značí:", a: ["Výšku", "Váhu"], ok: 0 },
+                { q: "Obsah podstavy kuželu je:", a: ["pi * r²", "2 * pi * r"], ok: 0 },
+                { q: "Plášť rozvinutý do roviny je:", a: ["Kruhová výseč", "Čtverec"], ok: 0 },
+                { q: "Vznikne rotací:", a: ["Pravoúhlého trojúhelníka", "Obdélníka"], ok: 0 },
+                { q: "Vrchol kužele je:", a: ["Bod mimo podstavu", "Střed kruhu"], ok: 0 },
+                { q: "Osový řez kuželem je:", a: ["Trojúhelník", "Kruh"], ok: 0 },
+                { q: "Je kužel rotační těleso?", a: ["Ano", "Ne"], ok: 0 },
+                { q: "Poloměr r=1, výška v=3, V=?", a: ["pi", "3pi"], ok: 0 },
+                { q: "Obsah pláště je:", a: ["pi * r * s", "pi * r²"], ok: 0 },
+                { q: "Průměr d je:", a: ["2 * r", "r / 2"], ok: 0 }
+            ],
+            'koule': [
+                { q: "Vzorec pro povrch S:", a: ["4 * pi * r²", "pi * r²"], ok: 0 },
+                { q: "Vzorec pro objem V:", a: ["4/3 * pi * r³", "pi * r² * v"], ok: 0 },
+                { q: "Má koule vrcholy?", a: ["Ne", "Ano"], ok: 0 },
+                { q: "Střed koule se značí:", a: ["S", "V"], ok: 0 },
+                { q: "Nejdelší úsečka v kouli je:", a: ["Průměr", "Poloměr"], ok: 0 },
+                { q: "Řez koulí středem je:", a: ["Hlavní kruh", "Vedlejší kruh"], ok: 0 },
+                { q: "Poloměr r=1, povrch S=?", a: ["4pi", "2pi"], ok: 0 },
+                { q: "Vznikne rotací:", a: ["Polokruhu", "Čtverce"], ok: 0 },
+                { q: "Je koule hranaté těleso?", a: ["Ne", "Ano"], ok: 0 },
+                { q: "Povrch koule se nazývá:", a: ["Kulová plocha", "Plášť"], ok: 0 },
+                { q: "Objem závisí na poloměru:", a: ["Na třetí", "Na druhou"], ok: 0 },
+                { q: "Povrch závisí na poloměru:", a: ["Na druhou", "Na první"], ok: 0 },
+                { q: "Konstanta pi je přibližně:", a: ["3,14", "2,14"], ok: 0 },
+                { q: "Dvě koule se stejným r jsou:", a: ["Shodné", "Různé"], ok: 0 },
+                { q: "Průměr d=10, r=?", a: ["5", "20"], ok: 0 }
             ]
         };
 
-        function toggleTest() {
-            document.getElementById('test-panel').classList.toggle('active');
-        }
+        function toggleTest() { document.getElementById('test-panel').classList.toggle('active'); }
 
         function startTest(typ) {
             aktualniTyp = typ;
-            scoreCelkem = 0;
-            scoreVade = 0;
-            // Příprava indexů otázek pro náhodné pořadí bez opakování
+            scoreCelkem = 0; scoreVade = 0;
             indexyOtazek = Array.from(Array(databazeOtazek[typ].length).keys());
             for (let i = indexyOtazek.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [indexyOtazek[i], indexyOtazek[j]] = [indexyOtazek[j], indexyOtazek[i]];
             }
-            
             updateScoreDisplay();
             document.getElementById('test-panel').classList.add('active');
             novaOtazka();
@@ -144,52 +229,43 @@
 
         function novaOtazka() {
             if (indexyOtazek.length === 0) {
-                const znovu = confirm("Gratulujeme! Prošel jsi všechny otázky v této kategorii.\nCelkové skóre: " + scoreCelkem + "\nChceš začít znovu?");
-                if (znovu) startTest(aktualniTyp);
-                else toggleTest();
-                return;
+                alert("Výborně! Dokončil jsi test.\nSkóre: " + scoreCelkem);
+                toggleTest(); return;
             }
-
-            const btn1 = document.getElementById('btn-1');
-            const btn2 = document.getElementById('btn-2');
-            
+            const btn1 = document.getElementById('btn-1'), btn2 = document.getElementById('btn-2');
             lzeKlikat = true; 
-            btn1.disabled = false;
-            btn2.disabled = false;
-            btn1.style.background = "#333";
-            btn2.style.background = "#333";
-
+            btn1.disabled = false; btn2.disabled = false;
+            btn1.style.background = "#333"; btn2.style.background = "#333";
             const okruh = databazeOtazek[aktualniTyp];
             const index = indexyOtazek.pop();
             const nahodna = okruh[index];
-            
             document.getElementById('otazka-text').innerText = nahodna.q;
-            btn1.innerText = nahodna.a[0];
-            btn2.innerText = nahodna.a[1];
-            aktualniSpravna = nahodna.ok;
             
-            if (window.MathJax && MathJax.typeset) {
-                MathJax.typeset();
+            // Náhodné prohození textů na tlačítkách
+            if (Math.random() > 0.5) {
+                btn1.innerText = nahodna.a[0]; btn2.innerText = nahodna.a[1];
+                aktualniSpravna = 0;
+            } else {
+                btn1.innerText = nahodna.a[1]; btn2.innerText = nahodna.a[0];
+                aktualniSpravna = 1;
             }
+
+            if (window.MathJax && MathJax.typeset) MathJax.typeset();
         }
 
         function checkAnswer(index) {
             if (!lzeKlikat) return; 
             lzeKlikat = false;
-
             const vybraneBtn = document.getElementById('btn-' + (index + 1));
             const spravneBtn = document.getElementById('btn-' + (aktualniSpravna + 1));
-
             if (index === aktualniSpravna) {
                 vybraneBtn.style.background = "#28a745"; 
-                scoreCelkem++;
-                scoreVade++;
+                scoreCelkem++; scoreVade++;
             } else {
                 vybraneBtn.style.background = "#dc3545"; 
                 spravneBtn.style.background = "#28a745"; 
-                scoreVade = 0; // Reset série při chybě
+                scoreVade = 0;
             }
-
             updateScoreDisplay();
             setTimeout(novaOtazka, 1000);
         }
@@ -228,7 +304,7 @@
             <p>Pamatuj: Při sčítání a odčítání musí být desetiná čárka vždy přesně pod sebou!</p>
             <div class="vzorec-container">12,5 + 3,24 = 15,74</div>
             <img src="Des-cisla.png" alt="Sčítání desetinných čísel pod sebou">
-            <button class="btn-start" onclick="startTest('desetinna')">Spustit test</button>
+            <button class="btn-start" onclick="startTest('desetinna')">Spustit test (15 otázek)</button>
         </details>
         <details>
             <summary><h2>2. Druhy úhlů</h2></summary>
@@ -246,7 +322,7 @@
                 <li><strong>Souhlasný a střídavý úhel:</strong> platí jen když je vedena přímka/úsečka přes rovnoběžky</li>
             </ul>
             <img src="uhly.png" alt="Druhy úhlů">
-            <button class="btn-start" onclick="startTest('uhly')">Spustit test</button>
+            <button class="btn-start" onclick="startTest('uhly')">Spustit test (15 otázek)</button>
         </details>
     </section>
 
@@ -256,8 +332,9 @@
             <summary><h2>1. Zlomky</h2></summary>
             <p>Zlomek vyjadřuje část celku. Horní číslo je čitatel, dolní jmenovatel.</p>
             <div class="vzorec-container">$$\frac{1}{2} + \frac{1}{3} = \frac{5}{6}$$</div>
+            
             <img src="zlomky.png" alt="Zlomky">
-            <button class="btn-start" onclick="startTest('zlomky')">Spustit test</button>
+            <button class="btn-start" onclick="startTest('zlomky')">Spustit test (15 otázek)</button>
         </details>
         <details>
             <summary><h2>2. Procenta a Trojčlenka</h2></summary>
@@ -268,7 +345,7 @@
             <p><strong>Přímá úměrnost:</strong> Když jedna hodnota roste, druhá také roste.</p>
             <p><strong>Nepřímá úměrnost:</strong> Když jedna hodnota roste, druhá klesá.</p>
             <img src="trojclenka.png" alt="Trojčlenka">
-            <button class="btn-start" onclick="startTest('procenta')">Spustit test</button>
+            <button class="btn-start" onclick="startTest('procenta')">Spustit test (15 otázek)</button>
         </details>
     </section>
 
@@ -282,7 +359,7 @@
             </p>
             <div class="vzorec-container">$$a^n \cdot a^m = a^{n+m}$$</div>
             <img src="mocniny.jpg" alt="Mocniny a odmocniny">
-            <button class="btn-start" onclick="startTest('mocniny')">Spustit test</button>
+            <button class="btn-start" onclick="startTest('mocniny')">Spustit test (15 otázek)</button>
         </details>
         <details>
             <summary><h2>2. Mnohočleny a Algebraické vzorce</h2></summary>
@@ -297,8 +374,9 @@
             <summary><h2>3. Pythagorova věta</h2></summary>
             <p>Používáme pro výpočet stran v pravoúhlém trojúhelníku.</p>
             <div class="vzorec-container">$$a^2 + b^2 = c^2$$</div>
+            
             <img src="Pyth.png" alt="Pythagorova věta">
-            <button class="btn-start" onclick="startTest('pythagoras')">Spustit test</button>
+            <button class="btn-start" onclick="startTest('pythagoras')">Spustit test (15 otázek)</button>
         </details>
     </section>
 
@@ -308,26 +386,39 @@
             <summary><h2>1. Lineární rovnice a jejich soustavy</h2></summary>
             <p><strong>Rovnice:</strong> Hledáme $x$. Co uděláš na levé straně, musíš udělat i na pravé.</p>
             <p><strong>Soustavy rovnic:</strong> Máme dvě rovnice o dvou neznámých (x, y). Používáme metodu sčítací nebo dosazovací.</p>
-            <button class="btn-start" onclick="startTest('rovnice')">Spustit test</button>
+            <button class="btn-start" onclick="startTest('rovnice')">Spustit test (15 otázek)</button>
         </details>
         <details>
             <summary><h2>2. Funkce</h2></summary>
             <p>Lineární funkce má předpis: $y = ax + b$. Grafem je vždy přímka.</p>
+            
+
+[Image of a linear function graph on a Cartesian plane]
+
         </details>
         <details>
             <summary><h2>3. Jehlan</h2></summary>
             <div class="vzorec-container">$$V = \frac{1}{3} S_p \cdot v$$ $$S = S_p + S_{pl}$$</div>
-            <p><strong>$S_p$</strong> = obsah podstavy, <strong>$v$</strong> = výška jehlanu, <strong>$S_{pl}$</strong> = obsah pláště.</p>
-            <button class="btn-start" onclick="startTest('telesa')">Spustit test</button>
+            <p><strong>$S_p$</strong> = obsah podstavy, <strong>$v$</strong> = výška jehlanu, <strong>$S_{pl}$</strong> = obsah pláště, <strong>$a$</strong> = strana podstavy / hrana podstavy, <strong>$w$</strong> = strana pláště, <strong>$h$</strong> = boční hrana.</p>
+            
+            <img src="jehlan.jpg" alt="Jehlan">
+            <button class="btn-start" onclick="startTest('jehlan')">Spustit test (15 otázek)</button>
         </details>
         <details>
             <summary><h2>4. Kužel</h2></summary>
             <div class="vzorec-container">$$V = \frac{1}{3} \pi r^2 v$$ $$S = \pi r^2 + \pi r s$$</div>
             <p><strong>$r$</strong> = poloměr, <strong>$v$</strong> = výška, <strong>$s$</strong> = strana kužele.</p>
+            
+            <img src="kuzel.png" alt="Kužel">
+            <button class="btn-start" onclick="startTest('kuzel')">Spustit test (15 otázek)</button>
         </details>
         <details>
             <summary><h2>5. Koule</h2></summary>
             <div class="vzorec-container">$$V = \frac{4}{3} \pi r^3$$ $$S = 4 \pi r^2$$</div>
+            <p><strong>$r$</strong> = poloměr.</p>
+            
+            <img src="koule.png" alt="Koule">
+            <button class="btn-start" onclick="startTest('koule')">Spustit test (15 otázek)</button>
         </details>
     </section>
 
@@ -337,15 +428,11 @@
     </section>
 
     <div id="test-panel" class="test-panel">
-        <h3 id="test-nazev">Procvičování</h3>
-        
         <div class="score-container">
             <div class="score-item">V kuse: <span id="val-vade" class="score-value">0</span></div>
             <div class="score-item">Celkem správně: <span id="val-celkem" class="score-value">0</span></div>
         </div>
-
         <p id="otazka-text"></p>
-        
         <div class="moznosti">
             <button id="btn-1" onclick="checkAnswer(0)"></button>
             <button id="btn-2" onclick="checkAnswer(1)"></button>
