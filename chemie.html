@@ -8,122 +8,253 @@
     
     <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
     <script>
-        window.MathJax = {
-          tex: {
-            inlineMath: [['$', '$'], ['\\(', '\\)']]
-          }
+        // ... (Tvůj původní JavaScript zůstává stejný) ...
+        let aktualniSpravna = 0;
+        let aktualniTyp = '';
+        let lzeKlikat = true; 
+        let scoreCelkem = 0;
+        let scoreVade = 0;
+        let indexyOtazek = []; 
+
+        const databazeOtazek = {
+            'zaklady': [
+                { q: "Které částice jsou v jádře atomu?", a: ["Protony a neutrony", "Elektrony"], ok: 0 },
+                { q: "Protonové číslo udává počet:", a: ["Protonů", "Neutronů"], ok: 0 },
+                { q: "Značka pro zlato je:", a: ["Au", "Ag"], ok: 0 },
+                { q: "Směs vody a písku je:", a: ["Různorodá", "Rovnorodá"], ok: 0 },
+                { q: "Filtrace slouží k oddělení:", a: ["Pevné látky od kapaliny", "Dvou kapalin"], ok: 0 },
+                { q: "Destilace využívá rozdílné:", a: ["Teploty varu", "Hustoty"], ok: 0 },
+                { q: "Elektrony mají náboj:", a: ["Záporný", "Kladný"], ok: 0 },
+                { q: "Většina hmotnosti atomu je v:", a: ["Jádře", "Obalu"], ok: 0 },
+                { q: "Chemicky čistá látka je:", a: ["Prvek nebo sloučenina", "Roztok"], ok: 0 },
+                { q: "Značka Pb patří:", a: ["Olovu", "Fosforu"], ok: 0 },
+                { q: "Vzduch je příkladem:", a: ["Směsi plynů", "Sloučeniny"], ok: 0 },
+                { q: "Který prvek je v 1. skupině PSP?", a: ["Sodík (Na)", "Vápník (Ca)"], ok: 0 },
+                { q: "Neutron má náboj:", a: ["Nulový", "Kladný"], ok: 0 },
+                { q: "Krystalizace se používá k:", a: ["Oddělení soli z vody", "Čištění vzduchu"], ok: 0 },
+                { q: "Sublimace je přechod z:", a: ["Pevné látky na plyn", "Plynu na kapalinu"], ok: 0 },
+                { q: "Značka Fe je:", a: ["Železo", "Fluor"], ok: 0 },
+                { q: "Proton má náboj:", a: ["Kladný", "Záporný"], ok: 0 },
+                { q: "Voda (H2O) je:", a: ["Sloučenina", "Prvek"], ok: 0 },
+                { q: "Číslo periody v PSP udává:", a: ["Počet vrstev elektronů", "Počet valenčních elektronů"], ok: 0 },
+                { q: "Ušlechtilé plyny jsou v:", a: ["18. skupině", "1. skupině"], ok: 0 }
+            ],
+            'nazvoslovi': [
+                { q: "Koncovka pro oxidační číslo IV je:", a: ["-ičitý", "-ičelý"], ok: 0 },
+                { q: "Oxidační číslo kyslíku v oxidech je:", a: ["-II", "+II"], ok: 0 },
+                { q: "Vzorec oxidu vápenatého:", a: ["CaO", "Ca2O"], ok: 0 },
+                { q: "Kyselina sírová má vzorec:", a: ["H2SO4", "H2SO3"], ok: 0 },
+                { q: "Hydroxidy obsahují skupinu:", a: ["OH", "COOH"], ok: 0 },
+                { q: "Koncovka -istý odpovídá číslu:", a: ["VII", "VIII"], ok: 0 },
+                { q: "Vzorec oxidu uhličitého je:", a: ["CO2", "CO"], ok: 0 },
+                { q: "Kyselina chlorovodíková je:", a: ["HCl", "HClO3"], ok: 0 },
+                { q: "Oxidační číslo vodíku v kyselinách:", a: ["I", "-I"], ok: 0 },
+                { q: "Soli kyseliny dusičné jsou:", a: ["Dusičnany", "Dusitany"], ok: 0 },
+                { q: "Zásady (louhy) mají pH:", a: ["Větší než 7", "Menší než 7"], ok: 0 },
+                { q: "Vzorec hydroxidu sodného:", a: ["NaOH", "Na(OH)2"], ok: 0 },
+                { q: "Koncovka -natý odpovídá číslu:", a: ["II", "IV"], ok: 0 },
+                { q: "H2SO3 je kyselina:", a: ["Siřičitá", "Sírová"], ok: 0 },
+                { q: "Oxid hlinitý má vzorec:", a: ["Al2O3", "AlO"], ok: 0 },
+                { q: "Kyselina dusičná je:", a: ["HNO3", "HNO2"], ok: 0 },
+                { q: "Soli kyseliny sírové jsou:", a: ["Sírany", "Siřičitany"], ok: 0 },
+                { q: "Koncovka -ičelý je pro číslo:", a: ["VII", "VI"], ok: 0 },
+                { q: "Neutrální pH má hodnotu:", a: ["7", "0"], ok: 0 },
+                { q: "Indikátor lakmus v kyselině:", a: ["Zčervená", "Modrá"], ok: 0 }
+            ],
+            'organika': [
+                { q: "Kolikavazný je uhlík v organice?", a: ["Čtyřvazný", "Dvojvazný"], ok: 0 },
+                { q: "Metan patří mezi:", a: ["Alkany", "Alkeny"], ok: 0 },
+                { q: "Ethanol má funkční skupinu:", a: ["-OH", "-CHO"], ok: 0 },
+                { q: "Kyselina octová je:", a: ["Kyselina ethanoová", "Kyselina methanoová"], ok: 0 },
+                { q: "Hlavní složkou zemního plynu je:", a: ["Metan", "Propan"], ok: 0 },
+                { q: "Vazba mezi C v alkanech je:", a: ["Jednoduchá", "Dvojná"], ok: 0 },
+                { q: "Alkiny mají vazbu:", a: ["Trojnou", "Dvojnou"], ok: 0 },
+                { q: "Vzorec benzenu je:", a: ["C6H6", "C2H2"], ok: 0 },
+                { q: "Metanol je na rozdíl od ethanolu:", a: ["Prudce jedovatý", "Léčivý"], ok: 0 },
+                { q: "Fruktóza je cukr:", a: ["Ovocný", "Hroznový"], ok: 0 },
+                { q: "Aminokyseliny tvoří:", a: ["Bílkoviny", "Tuky"], ok: 0 },
+                { q: "Lipidy jsou chemicky:", a: ["Estery", "Alkoholy"], ok: 0 },
+                { q: "PVC se vyrábí z:", a: ["Vinylchloridu", "Etylenu"], ok: 0 },
+                { q: "Sacharóza je cukr:", a: ["Řepný", "Mléčný"], ok: 0 },
+                { q: "Enzymy jsou biologické:", a: ["Katalyzátory", "Inhibitory"], ok: 0 },
+                { q: "Složkou mýdla jsou soli:", a: ["Mastných kyselin", "Aminokyselin"], ok: 0 },
+                { q: "Zásobní cukr živočichů je:", a: ["Glykogen", "Škrob"], ok: 0 },
+                { q: "Fotosyntéza produkuje:", a: ["Glukózu a kyslík", "Oxid uhličitý"], ok: 0 },
+                { q: "Základní složka papíru je:", a: ["Celulóza", "Laktóza"], ok: 0 },
+                { q: "Denaturace bílkovin nastává:", a: ["Teplem", "Mrazem"], ok: 0 }
+            ]
         };
+
+        function toggleTest() { document.getElementById('test-panel').classList.toggle('active'); }
+        function startTest(typ) {
+            aktualniTyp = typ;
+            scoreCelkem = 0; scoreVade = 0;
+            indexyOtazek = Array.from(Array(databazeOtazek[typ].length).keys());
+            for (let i = indexyOtazek.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [indexyOtazek[i], indexyOtazek[j]] = [indexyOtazek[j], indexyOtazek[i]];
+            }
+            updateScoreDisplay();
+            document.getElementById('test-panel').classList.add('active');
+            novaOtazka();
+        }
+        function updateScoreDisplay() {
+            document.getElementById('val-celkem').innerText = scoreCelkem;
+            document.getElementById('val-vade').innerText = scoreVade;
+        }
+        function novaOtazka() {
+            if (indexyOtazek.length === 0) {
+                alert("Gratulujeme! Dokončil jsi test. Skóre: " + scoreCelkem + "/20");
+                toggleTest(); return;
+            }
+            lzeKlikat = true;
+            const btn1 = document.getElementById('btn-1'), btn2 = document.getElementById('btn-2');
+            btn1.style.background = ""; btn2.style.background = "";
+            const okruh = databazeOtazek[aktualniTyp];
+            const index = indexyOtazek.pop();
+            const nahodna = okruh[index];
+            document.getElementById('otazka-text').innerText = (20 - indexyOtazek.length) + ". " + nahodna.q;
+            if (Math.random() > 0.5) {
+                btn1.innerText = nahodna.a[0]; btn2.innerText = nahodna.a[1];
+                aktualniSpravna = 0;
+            } else {
+                btn1.innerText = nahodna.a[1]; btn2.innerText = nahodna.a[0];
+                aktualniSpravna = 1;
+            }
+        }
+        function checkAnswer(index) {
+            if (!lzeKlikat) return;
+            lzeKlikat = false;
+            const vybraneBtn = document.getElementById('btn-' + (index + 1));
+            const spravneBtn = document.getElementById('btn-' + (aktualniSpravna + 1));
+            if (index === aktualniSpravna) {
+                vybraneBtn.style.background = "#28a745";
+                scoreCelkem++; scoreVade++;
+            } else {
+                vybraneBtn.style.background = "#dc3545";
+                spravneBtn.style.background = "#28a745";
+                scoreVade = 0;
+            }
+            updateScoreDisplay();
+            setTimeout(novaOtazka, 1200);
+        }
     </script>
 </head>
 <body>
 
     <nav class="navbar">
         <ul>
-            <li><a href="#uvod">Úvod</a></li>
             <li><a href="#8trida">8. Třída</a></li>
             <li><a href="#9trida">9. Třída</a></li>
+            <li><a href="#vypocty">Výpočty</a></li>
             <li><a href="#kontakt">Kontakt</a></li>
         </ul>
     </nav>
 
     <section id="uvod">
         <h1>Chemie Srozumitelně</h1>
-        <p>Od atomů až po organické sloučeniny. Chemie není nuda, když víš, jak věci reagují!</p>
-        <button class="tlacitko-uvod" onclick="window.location.href='#8trida';">
-            Začít objevovat
-        </button>
-        <button class="tlacitko-uvod" onclick="window.location.href='index.html';">
-            Zpět na úvod
-        </button>
+        <p>Zvládni chemii levou zadní. Názvosloví, rovnice i organika na jednom místě.</p>
+        <button class="tlacitko-uvod" onclick="window.location.href='#8trida';">8. Třída</button>
+        <button class="tlacitko-uvod" onclick="window.location.href='#9trida';">9. Třída</button>
     </section>
 
     <section id="8trida">
-        <h1>8. Třída: Základy a Anorganická chemie</h1>
+        <h1>8. Třída: Anorganika a Metody</h1>
         
         <details open>
-            <summary><h2>1. Atomy a Prvky</h2></summary>
-            <p>Vše kolem nás je z atomů. Atom má jádro (protony, neutrony) a obal (elektrony).</p>
-            <p><strong>Periodická soustava prvků:</strong> Tabulka, kde jsou prvky seřazeny podle protonového čísla ($Z$).</p>
-            <div class="vzorec-container">$_Z^A X$</div>
-            <p>Kde $A$ je hmotnostní číslo a $Z$ je protonové číslo.</p>
-        </details>
-
-        <details>
-            <summary><h2>2. Chemická vazba a Směsi</h2></summary>
-            <p>Atomy se spojují do molekul pomocí <strong>chemické vazby</strong>. Směsi dělíme na:</p>
-            <ul>
-                <li><strong>Rovnorodé (roztoky):</strong> Nevidíme složky (např. slaná voda).</li>
-                <li><strong>Různorodé:</strong> Vidíme složky (např. písek ve vodě).</li>
-            </ul>
-        </details>
-
-        <details>
-            <summary><h2>3. Názvosloví (Oxidy, Kyseliny, Hydroxidy)</h2></summary>
-            <p>Základ chemie v 8. třídě. Musíš znát oxidační čísla (I až VIII).</p>
-            <div class="vzorec-container">
-                $H_2SO_4$ (Kyselina sírová) <br>
-                $NaOH$ (Hydroxid sodný)
+            <summary>Separační metody (Jak oddělit směsi)</summary>
+            <div class="vysvetleni-box">
+                <h4>💡 Vysvětlení:</h4>
+                Představ si, že máš v misce smíchané různé věci a chceš z nich vybrat jen jednu. Chemie na to má "fígle" podle toho, jak se ty látky chovají:
+                <ul>
+                    <li><strong>Filtrace:</strong> Použiješ "síto". Pevné kousky neprojdou, voda ano. <span class="priklad">(Jako když scedíš čaj od lístků).</span></li>
+                    <li><strong>Destilace:</strong> Využívá toho, že se každá tekutina začne vypařovat při jiné teplotě. Alkohol "ulétne" do páry dřív než voda. Ty tu páru pak zase zchladíš na tekutinu.</li>
+                    <li><strong>Krystalizace:</strong> Necháš vodu vypařit a to, co v ní bylo rozpuštěné, tam zbude v krásných kostičkách. <span class="priklad">(Jako když ti uschne slaná voda na kůži u moře).</span></li>
+                </ul>
             </div>
-            <p><strong>pH stupnice:</strong> Určuje kyselost (0–6 kyseliny, 7 neutrální, 8–14 zásady).</p>
+            
+
+[Image of simple distillation apparatus]
+
+            <button class="btn-start" onclick="startTest('zaklady')">Test: Základy a Směsi (20 ot.)</button>
         </details>
 
         <details>
-            <summary><h2>4. Výpočty v chemii (Látkové množství)</h2></summary>
-            <p>Jak spočítat, kolik "toho" v roztoku je.</p>
-            <div class="vzorec-container">
-                $$n = \frac{m}{M}$$
+            <summary>Názvosloví (Oxidy a Kyseliny)</summary>
+            <div class="vysvetleni-box">
+                <h4>💡 Vysvětlení:</h4>
+                Prvky se spolu kamarádí a drží se "za ruce". Kolik rukou prvek nabízí, to nám říká <strong>oxidační číslo</strong> (ty římské číslice jako I, II, IV).
+                <ul>
+                    <li>Když má prvek koncovku <strong>-ičitý</strong>, má 4 volné ruce.</li>
+                    <li>Kyslík v oxidech má vždy <strong>-2</strong> ruce (potřebuje dvě ruce někoho jiného, aby byl spokojený).</li>
+                    <li>Ve vzorci to musí vždy vyjít nastejno – kolik rukou nabízí jeden, tolik jich musí ten druhý chytit. Součet musí být nula!</li>
+                </ul>
+                <img src="oxcisla.jpg" alt="Oxidační čísla">
             </div>
-            <p>$n$ = látkové množství [mol], $m$ = hmotnost [g], $M$ = molární hmotnost [g/mol].</p>
+            <button class="btn-start" onclick="startTest('nazvoslovi')">Test: Názvosloví (20 ot.)</button>
+        </details>
+    </section>
+
+    <section id="vypocty">
+        <h1>Výpočty a Koncentrace</h1>
+        <details>
+            <summary>Hmotnostní zlomek <strong>(W)</strong></summary>
+            <div class="vysvetleni-box">
+                <h4>💡 Vysvětlení:</h4>
+                Hmotnostní zlomek ti říká, jaká část z celku je ta látka, která tě zajímá. Výsledek je číslo od 0 do 1 (když to vynásobíš 100, máš procenta).
+                <br><br>
+                <span class="priklad">Příklad:</span> Máš 100 g slaného roztoku. Z toho je 10 g sůl a 90 g voda. 
+                Vezmeš sůl (10) a vydělíš ji celkem (100). Vyjde ti 0,1. To znamená, že roztok je 10%.
+            </div>
+            <div class="vzorec-container">$$w = \frac{m_{látky}}{m_{roztoku}}$$</div>
         </details>
     </section>
 
     <section id="9trida">
-        <h1>9. Třída: Organika a Chemie kolem nás</h1>
+        <h1>9. Třída: Organika a Biochemie</h1>
         
         <details>
-            <summary><h2>1. Uhlovodíky (Základ organiky)</h2></summary>
-            <p>Sloučeniny uhlíku ($C$) a vodíku ($H$). Uhlík je v organice vždy <strong>čtyřvazný</strong>!</p>
-            <ul>
-                <li><strong>Alkany:</strong> Jen jednoduché vazby (Metan, Etan, Propan...).</li>
-                <li><strong>Alkeny:</strong> Obsahují dvojnou vazbu.</li>
-                <li><strong>Alkiny:</strong> Obsahují trojnou vazbu.</li>
-            </ul>
-            <div class="vzorec-container">$CH_4$ (Metan)</div>
+            <summary>Uhlovodíky a Paliva</summary>
+            <div class="vysvetleni-box">
+                <h4>💡 Vysvětlení:</h4>
+                Organická chemie je v podstatě "stavebnice z Uhlíku (C)". Uhlík je nejdůležitější dílek a <strong>vždycky má 4 vazby</strong> (4 výstupky na Lego kostce).
+                <ul>
+                    <li><strong>Alkany:</strong> Uhlíky jsou spojeny jen jednou čárkou (jednoduchá vazba). Jsou to hlavně paliva (Metan, Propan).</li>
+                    <li><strong>Alkeny a Alkiny:</strong> Mají mezi sebou dvojitou nebo trojitou vazbu. Je to jako pevnější sevření, které se ale snáze "roztrhne", aby se tam mohlo přichytit něco jiného.</li>
+                </ul>
+            </div>
+            
+            <button class="btn-start" onclick="startTest('organika')">Test: Organika (20 ot.)</button>
         </details>
 
         <details>
-            <summary><h2>2. Deriváty uhlovodíků (Alkoholy, Estery)</h2></summary>
-            <p>Když k uhlovodíku přidáme jiný prvek, vznikne derivát.</p>
-            <ul>
-                <li><strong>Alkoholy:</strong> Obsahují skupinu $-OH$ (např. Ethanol).</li>
-                <li><strong>Karboxylové kyseliny:</strong> Skupina $-COOH$ (např. Kyselina octová).</li>
-            </ul>
-        </details>
-
-        <details>
-            <summary><h2>3. Přírodní látky (Biochemie)</h2></summary>
-            <p>Látky, ze kterých jsme postaveni:</p>
-            <ul>
-                <li><strong>Sacharidy:</strong> Cukry (zdroj energie).</li>
-                <li><strong>Lipidy:</strong> Tuky (zásobárna energie).</li>
-                <li><strong>Bílkoviny:</strong> Stavební látky těla.</li>
-            </ul>
-        </details>
-
-        <details>
-            <summary><h2>4. Redoxní reakce</h2></summary>
-            <p>Reakce, při kterých se mění oxidační čísla prvků. Jeden prvek se <strong>oxiduje</strong> (odevzdá elektrony) a druhý se <strong>redukuje</strong> (přijme je).</p>
-            <div class="vzorec-container">
-                $Fe^0 + Cu^{+II}SO_4 \rightarrow Fe^{+II}SO_4 + Cu^0$
+            <summary>Biochemie (Sacharidy, Tuky, Bílkoviny)</summary>
+            <div class="vysvetleni-box">
+                <h4>💡 Vysvětlení:</h4>
+                Biochemie studuje palivo a stavební materiál pro tvé tělo:
+                <ul>
+                    <li><strong>Sacharidy (Cukry):</strong> Okamžitá energie. Tělo je "spálí" hned, když potřebuješ běžet nebo přemýšlet.</li>
+                    <li><strong>Tuky:</strong> Zásobárna na horší časy. Mají v sobě nejvíc energie, ale tělo je rozbalí, až když dojdou cukry.</li>
+                    <li><strong>Bílkoviny:</strong> Jsou z nich svaly, vlasy a nehty. Jsou to složité řetězce "aminokyselin". Když je zahřeješ na vysokou teplotu, změní tvar a už nefungují (proto je vysoká horečka nebezpečná).</li>
+                </ul>
             </div>
         </details>
     </section>
 
-    <section id="kontakt">
-        <h1>Kontakt</h1>
-        <p>Email: <a href="mailto:david.z.kontakt@gmail.com" style="color: #40b3ff;">david.z.kontakt@gmail.com</a></p>
-    </section>
+    <div id="test-panel" class="test-panel">
+        <div class="score-container">
+            <div class="score-item">V řadě: <span id="val-vade" class="score-value">0</span></div>
+            <div class="score-item">Správně: <span id="val-celkem" class="score-value">0</span></div>
+        </div>
+        <p id="otazka-text" style="font-size: 1.3rem; margin-bottom: 25px;"></p>
+        <div class="moznosti">
+            <button id="btn-1" onclick="checkAnswer(0)"></button>
+            <button id="btn-2" onclick="checkAnswer(1)"></button>
+        </div>
+        <button class="zavrit-test" onclick="toggleTest()">× ZAVŘÍT TEST</button>
+    </div>
 
 </body>
 </html>
